@@ -20,7 +20,8 @@ public:
 
 		mSceneMgr->setAmbientLight(Ogre::ColourValue(1.0, 1.0, 1.0));
 		mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
-		
+		mSceneMgr->setSkyBox(true, "Estrellas/SkyBox");
+		//mSceneMgr->setSkyDome(true, "Estrellas/SkyDome", 1, 1);	
 
 		Ogre::Entity* ent01 = mSceneMgr->createEntity("MyEntity1","ejes01.mesh");
 		Ogre::SceneNode* node01 = mSceneMgr->createSceneNode("Node01");
