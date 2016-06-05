@@ -100,6 +100,7 @@ public:
 		Ogre::SceneNode* nodoNave = mSceneMgr->createSceneNode("NodoNave");
 		mSceneMgr->getRootSceneNode()->addChild(nodoNave);
 		nodoNave->attachObject(entNave);
+		nodoNave->translate(0.0,-5,0.0);
 
 		//cara de atras
 		ManualObject* manualCara = mSceneMgr->createManualObject("manualCara");
