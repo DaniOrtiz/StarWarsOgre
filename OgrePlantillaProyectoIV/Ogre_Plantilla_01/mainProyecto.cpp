@@ -1,11 +1,13 @@
 #include "Ogre\ExampleApplication.h"
 
 float r = 1.0;
+float xnave = 0.0, ynave = 0.0, znave = 0.0;
 
 class FrameListenerClase : public Ogre::FrameListener { // Hereda de la clase FrameListener de Ogre, escucha algo
 
 private:
 	Ogre::Camera* _cam;
+	Ogre::SceneNode* _nodoNave; // Creamos nodo
 
 	OIS::InputManager* _man;
 	OIS::Keyboard* _key; // Teclado
@@ -13,7 +15,7 @@ private:
 
 public:
 	// Constructor que le asignamos el nodo que creamos
-	FrameListenerClase(Ogre::Camera* cam, RenderWindow* win) {
+	FrameListenerClase(Ogre::SceneNode* nodoNave01, Ogre::Camera* cam, RenderWindow* win) {
 		
 		// Configuracion captura teclado y mouse
 		// ESTO ES ASI PORQUE SI, NO CAMBIA
@@ -31,6 +33,7 @@ public:
 		_key = static_cast< OIS::Keyboard*>(_man->createInputObject(OIS::OISKeyboard, false));
 		_mouse = static_cast< OIS::Mouse*>(_man->createInputObject(OIS::OISMouse, false));
 
+		_nodoNave = nodoNave01;
 		_cam = cam;
 	}
 
@@ -48,7 +51,6 @@ public:
 		_mouse->capture();
 
 		float movSpeed = 10.0f;
-		Ogre::Vector3 tmov(0,0,0);
 		Ogre::Vector3 tcam(0,0,0);
 
 		if (_key->isKeyDown(OIS::KC_ESCAPE))
@@ -75,6 +77,9 @@ public:
 		_cam->pitch(Ogre::Radian(rotY));
 		_cam->moveRelative(tcam*movSpeed*evt.timeSinceLastFrame);
 
+		_nodoNave->translate(tcam*movSpeed*evt.timeSinceLastFrame);
+		_nodoNave->yaw(Ogre::Radian(rotX));
+		_nodoNave->pitch(Ogre::Radian(rotY));
 		return true;
 	}
 };
@@ -83,8 +88,10 @@ class Example1 : public ExampleApplication
 {
 
 public:
-
+	Ogre::SceneNode* nodoNave;
 	Ogre::FrameListener* FrameListener01; // Objeto de FrameListener
+
+	Ogre::SceneNode* nodeCamara;
 
 	// Constructor
 	Example1() {
@@ -100,7 +107,7 @@ public:
 
 	// Metodo
 	void createFrameListener() {
-		FrameListener01 = new FrameListenerClase(mCamera, mWindow); // Eventualmente tenemos que tener un arreglo para poder declarar cada objeto
+		FrameListener01 = new FrameListenerClase(nodoNave,mCamera, mWindow); // Eventualmente tenemos que tener un arreglo para poder declarar cada objeto
 																			  // la variable mCamera viene con la plantilla no la creamos nosotros
 		mRoot->addFrameListener(FrameListener01);
 	}
@@ -108,7 +115,7 @@ public:
 	void createCamera() {
 
 		mCamera = mSceneMgr->createCamera("MyCamera1");
-		mCamera->setPosition(0,10,50);
+		mCamera->setPosition(0,0.0,20);
 		mCamera->lookAt(0,0,-50);
 		mCamera->setNearClipDistance(5);
 
@@ -178,6 +185,13 @@ public:
 		/*
 			**********  NAVE  **********
 		*/
+
+
+		nodeCamara = mSceneMgr->createSceneNode("nodeCamara");
+		//mSceneMgr->getRootSceneNode()->addChild(nodeCamara);
+		//nodeCamara->attachObject(mCamera);
+		//nodeCamara->addChild(nodoNave);
+
 		const float x1 = 2.0;
 		const float y1 = 1.7;
 		const float z1 = 6.0;
@@ -207,7 +221,7 @@ public:
 		manual->end();
 		manual->convertToMesh("MeshNave");
 		Ogre::Entity* entNave = mSceneMgr->createEntity("MeshNave");
-		Ogre::SceneNode* nodoNave = mSceneMgr->createSceneNode("NodoNave");
+		nodoNave = mSceneMgr->createSceneNode("NodoNave");
 		mSceneMgr->getRootSceneNode()->addChild(nodoNave);
 		nodoNave->attachObject(entNave);
 
