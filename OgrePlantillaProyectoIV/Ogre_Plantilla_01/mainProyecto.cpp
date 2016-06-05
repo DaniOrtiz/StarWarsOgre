@@ -47,81 +47,6 @@ public:
 		mSceneMgr->getRootSceneNode()->attachObject(entEscena06);
 
 		
-
-		//Ogre::Entity* entPlanoY = mSceneMgr->createEntity("planoYEnt","cuadriculaY01.mesh");
-		//Ogre::SceneNode* nodePlanoY = mSceneMgr->createSceneNode("nodePlanoY");
-		//mSceneMgr->getRootSceneNode()->addChild(nodePlanoY);
-		//nodePlanoY->setPosition(0.0,0.0,0.0);
-		//nodePlanoY->attachObject(entPlanoY);
-
-		float x1 = 2.0;
-		float y1 = 1.7;
-		float z1 = 6;
-		float x2 = 0.7;
-		float y2 = 0.4;
-		float z2 = -8;
-		// NAVE
-		//Cuadricula
-		Ogre::Entity* entPlanoX = mSceneMgr->createEntity("planoXEnt","cuadriculaX01.mesh");
-		Ogre::SceneNode* nodePlanoX = mSceneMgr->createSceneNode("nodePlanoX");
-		mSceneMgr->getRootSceneNode()->addChild(nodePlanoX);
-		nodePlanoX->setPosition(0.0,-y1,0.0);
-		nodePlanoX->attachObject(entPlanoX);
-
-		ManualObject* manual = mSceneMgr->createManualObject("manual");
-		manual->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
-
-		manual->position(-0.5-x1, 0.0, z1);
-		manual->position( -x1, -y1, z1);
-		manual->position( -x1,  y1, z1);
-		manual->position(  x1, -y1, z1);
-		manual->position(  x1,  y1, z1);
-		manual->position(x1+0.5, 0.0, z1);
-		//lados
-		manual->position(x1+0.5, 0.0, z1-7);
-		manual->position(  x1, -y1, z1);
-		manual->position(  x1, -y1, z1-7);
-		manual->position( -x1, -y1, z1);
-		manual->position( -x1, -y1, z1-7);
-		manual->position(-0.5-x1, 0.0, z1);
-		manual->position(-0.5-x1, 0.0, z1-7);
-		manual->position( -x1,  y1, z1);
-		manual->position( -x1,  y1, z1-7);
-		manual->position(  x1,  y1, z1);
-		manual->position(  x1,  y1, z1-7);
-		manual->position(x1+0.5, 0.0, z1-7);
-  
-		manual->end();
-		mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(manual);
-
-
-		ManualObject* manual2 = mSceneMgr->createManualObject("manual2");
-		manual2->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
-
-		manual2->position(-0.2-x2, 0.0, z2);
-		manual2->position( -x2, -y2, z2);
-		manual2->position( -x2,  y2, z2);
-		manual2->position(  x2, -y2, z2);
-		manual2->position(  x2,  y2, z2);
-		manual2->position(x2+0.2, 0.0, z2);
-		//lados
-		manual2->position(x1+0.5, 0.0, z2+7);
-		manual2->position(  x2, -y2, z2);
-		manual2->position(  x1, -y1, z2+7);
-		manual2->position( -x2, -y2, z2);
-		manual2->position( -x1, -y1, z2+7);
-		manual2->position(-0.2-x2, 0.0, z2);
-		manual2->position(-0.5-x1, 0.0, z2+7);
-		manual2->position( -x2,  y2, z2);
-		manual2->position( -x1,  y1, z2+7);
-		manual2->position(  x2,  y2, z2);
-		manual2->position(  x1,  y1, z2+7);
-		manual2->position(x1+0.5, 0.0, z2+7);
-  
-		manual2->end();
-		mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(manual2);
-
-
 		// Creando Texturas
 
 		//Texturas para Torretas
@@ -136,6 +61,110 @@ public:
 
 		Ogre::TextureUnitState* torretaTexture2 =
 			materialTorretas2 ->getTechnique(0) ->getPass(0)->createTextureUnitState("MtlPlat2.jpg");
+
+
+		//Cuadricula
+		//Ogre::Entity* entPlanoY = mSceneMgr->createEntity("planoYEnt","cuadriculaY01.mesh");
+		//Ogre::SceneNode* nodePlanoY = mSceneMgr->createSceneNode("nodePlanoY");
+		//mSceneMgr->getRootSceneNode()->addChild(nodePlanoY);
+		//nodePlanoY->setPosition(0.0,0.0,6.0);
+		//nodePlanoY->attachObject(entPlanoY);
+
+		//Ogre::Entity* entPlanoX = mSceneMgr->createEntity("planoXEnt","cuadriculaX01.mesh");
+		//Ogre::SceneNode* nodePlanoX = mSceneMgr->createSceneNode("nodePlanoX");
+		//mSceneMgr->getRootSceneNode()->addChild(nodePlanoX);
+		//nodePlanoX->setPosition(0.0,0.0,6.0);
+		//nodePlanoX->attachObject(entPlanoX);
+
+		/*
+			**********  NAVE  **********
+		*/
+
+		const float x1 = 2.0;
+		const float y1 = 1.7;
+		const float z1 = 6.0;
+		const float x2 = 0.6;
+		const float y2 = 0.4;
+		const float z2 = -8.0;
+
+		ManualObject* manual = mSceneMgr->createManualObject("manual");
+		manual->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
+
+			manual->position(-2.5, 0.0, z1);
+			manual->position( -x1, -y1, z1);
+			manual->position( -x1,  y1, z1);
+			manual->position(  x1, -y1, z1);
+			manual->position(  x1,  y1, z1);
+			manual->position( 2.5, 0.0, z1);
+			//lados
+			manual->position( 2.5, 0.0, z1-7);
+			manual->position(  x1, -y1, z1);
+			manual->position(  x1, -y1, z1-7);
+			manual->position( -x1, -y1, z1);
+			manual->position( -x1, -y1, z1-7);
+			manual->position(-2.5, 0.0, z1);
+			manual->position(-2.5, 0.0, z1-7);
+			manual->position( -x1,  y1, z1);
+			manual->position( -x1,  y1, z1-7);
+			manual->position(  x1,  y1, z1);
+			manual->position(  x1,  y1, z1-7);
+			manual->position( 2.5, 0.0, z1-7);
+
+			for(int i = 0; i < 19; i++){
+				manual->index(i);
+			}
+
+		manual->end();
+		Ogre::String naveBase01 = "MeshNaveBase01";
+		manual->convertToMesh(naveBase01);
+
+		Ogre::Entity* entNave = mSceneMgr->createEntity(naveBase01);
+		Ogre::SceneNode* nodoNaveBase = mSceneMgr->createSceneNode("NodoNaveBase");
+		mSceneMgr->getRootSceneNode()->addChild(nodoNaveBase);
+		nodoNaveBase->attachObject(entNave);
+
+		ManualObject* manual2 = mSceneMgr->createManualObject("manual2");
+		manual2->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
+
+			manual2->position(-0.8, 0.0, z2);
+			manual2->position( -x2, -y2, z2);
+			manual2->position( -x2,  y2, z2);
+			manual2->position(  x2, -y2, z2);
+			manual2->position(  x2,  y2, z2);
+			manual2->position( 0.8, 0.0, z2);
+			//lados
+			manual2->position( 2.5, 0.0, z2+7);
+			manual2->position(  x2, -y2, z2);
+			manual2->position(  x1, -y1, z2+7);
+			manual2->position( -x2, -y2, z2);
+			manual2->position( -x1, -y1, z2+7);
+			manual2->position(-0.8, 0.0, z2);
+			manual2->position(-2.5, 0.0, z2+7);
+			manual2->position( -x2,  y2, z2);
+			manual2->position( -x1,  y1, z2+7);
+			manual2->position(  x2,  y2, z2);
+			manual2->position(  x1,  y1, z2+7);
+			manual2->position( 2.5, 0.0, z2+7);
+
+			for(int i = 0; i < 19; i++){
+				manual2->index(i);
+			}
+  
+		manual2->end();
+		Ogre::String naveBase02 = "MeshNaveBase02";
+		manual2->convertToMesh(naveBase02);
+
+		Ogre::Entity* entNaveBase02 = mSceneMgr->createEntity(naveBase02);
+		Ogre::SceneNode* nodoNaveBase02 = mSceneMgr->createSceneNode("NodoNaveBase02");
+		nodoNaveBase->addChild(nodoNaveBase02);
+		nodoNaveBase02->attachObject(entNaveBase02);
+
+		/*
+			**********  FIN NAVE  **********
+		*/
+
+
+		
 		
 		// Creando Torretas
 		// TORRETA 1 - Primera de la izquierda
