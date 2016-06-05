@@ -46,13 +46,7 @@ public:
 		Ogre::Entity* entEscena06 = mSceneMgr->createEntity("ogre_torretas01.mesh");
 		mSceneMgr->getRootSceneNode()->attachObject(entEscena06);
 
-		// NAVE
-		//Cuadricula
-		//Ogre::Entity* entPlanoX = mSceneMgr->createEntity("planoXEnt","cuadriculaX01.mesh");
-		//Ogre::SceneNode* nodePlanoX = mSceneMgr->createSceneNode("nodePlanoX");
-		//mSceneMgr->getRootSceneNode()->addChild(nodePlanoX);
-		//nodePlanoX->setPosition(0.0,0.0,0.0);
-		//nodePlanoX->attachObject(entPlanoX);
+		
 
 		//Ogre::Entity* entPlanoY = mSceneMgr->createEntity("planoYEnt","cuadriculaY01.mesh");
 		//Ogre::SceneNode* nodePlanoY = mSceneMgr->createSceneNode("nodePlanoY");
@@ -60,28 +54,72 @@ public:
 		//nodePlanoY->setPosition(0.0,0.0,0.0);
 		//nodePlanoY->attachObject(entPlanoY);
 
-		ManualObject* manual = mSceneMgr->createManualObject("manual");
-		manual->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_FAN);
- 
-		// define vertex position of index 0..3
-		manual->position(-3.0, 2.5, 0.0);
-		manual->position(-4.0, 0.0, 0.0);
-		manual->position(-3.0,-2.5, 0.0);
-		manual->position( 3.0,-2.5, 0.0);
-		manual->position( 4.0, 0.0, 0.0);
-		manual->position( 3.0, 2.5, 0.0);
-		manual->position( 3.0, 2.5,-8.0);
-		manual->position(-3.0, 2.5,-8.0);
-		manual->position(-4.0, 0.0,-8.0);
-		manual->position(-3.0,-2.5,-8.0);
-		manual->position( 3.0,-2.5,-8.0);
-		manual->position( 4.0, 0.0,-8.0);
-		manual->position( 3.0, 2.5,-8.0);
-		manual->position(-3.0, 2.5,-8.0);
+		float x2 = 2.0;
+		float y1 = 1.7;
+		float z1 = 6;
+		// NAVE
+		//Cuadricula
+		Ogre::Entity* entPlanoX = mSceneMgr->createEntity("planoXEnt","cuadriculaX01.mesh");
+		Ogre::SceneNode* nodePlanoX = mSceneMgr->createSceneNode("nodePlanoX");
+		mSceneMgr->getRootSceneNode()->addChild(nodePlanoX);
+		nodePlanoX->setPosition(0.0,-y1,0.0);
+		nodePlanoX->attachObject(entPlanoX);
 
+		ManualObject* manual = mSceneMgr->createManualObject("manual");
+		manual->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
+
+		manual->position(-2.5, 0.0, z1);
+		manual->position( -x2,  -y1, z1);
+		manual->position( -x2,   y1, z1);
+		manual->position(  x2,  -y1, z1);
+		manual->position(  x2,   y1, z1);
+		manual->position( 2.5, 0.0, z1);
+		//lados
+		manual->position( 2.5, 0.0, z1-7);
+		manual->position(  x2,  -y1, z1);
+		manual->position(  x2,  -y1, z1-7);
+		manual->position( -x2,  -y1, z1);
+		manual->position( -x2,  -y1, z1-7);
+		manual->position(-2.5, 0.0, z1);
+		manual->position(-2.5, 0.0, z1-7);
+		manual->position( -x2,   y1, z1);
+		manual->position( -x2,   y1, z1-7);
+		manual->position(  x2,   y1, z1);
+		manual->position(  x2,   y1, z1-7);
+		manual->position( 2.5, 0.0, z1-7);
   
 		manual->end();
 		mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(manual);
+
+		float x1 = 1.0;
+		float y2  = 1.0;
+		float z2 = -8;
+
+		ManualObject* manual2 = mSceneMgr->createManualObject("manual2");
+		manual2->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
+
+		manual2->position(-2.5, 0.0, z2);
+		manual2->position( -x1,  -y2, z2);
+		manual2->position( -x1,   y2, z2);
+		manual2->position(  x1,  -y2, z2);
+		manual2->position(  x1,   y2, z2);
+		manual2->position( 2.5, 0.0, z2);
+		//lados
+		manual2->position( 2.5, 0.0, z2+7);
+		manual2->position(  x1,  -y2, z2);
+		manual2->position(  x2,  -y1, z2+7);
+		manual2->position( -x1,  -y2, z2);
+		manual2->position( -x2,  -y1, z2+7);
+		manual2->position(-2.5, 0.0, z2);
+		manual2->position(-2.5, 0.0, z2+7);
+		manual2->position( -x1,   y2, z2);
+		manual2->position( -x2,   y1, z2+7);
+		manual2->position(  x1,   y2, z2);
+		manual2->position(  x2,   y1, z2+7);
+		manual2->position( 2.5, 0.0, z2+7);
+  
+		manual2->end();
+		mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(manual2);
 
 
 		// Creando Texturas
