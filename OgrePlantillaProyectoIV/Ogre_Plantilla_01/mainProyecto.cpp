@@ -85,7 +85,7 @@ public:
 		const float z1 = 6.0;
 		const float x2 = 0.6;
 		const float y2 = 0.4;
-		const float z2 = -8.0;
+		const float z2 = -20.0;
 
 		ManualObject* manual = mSceneMgr->createManualObject("manual");
 		manual->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
@@ -96,68 +96,13 @@ public:
 			manual->position(  x1, -y1, z1);
 			manual->position(  x1,  y1, z1);
 			manual->position( 2.5, 0.0, z1);
-			//lados
+
+
 			manual->position( 2.5, 0.0, z1-7);
 			manual->position(  x1, -y1, z1);
-			manual->position(  x1, -y1, z1-7);
-			manual->position( -x1, -y1, z1);
-			manual->position( -x1, -y1, z1-7);
-			manual->position(-2.5, 0.0, z1);
-			manual->position(-2.5, 0.0, z1-7);
-			manual->position( -x1,  y1, z1);
-			manual->position( -x1,  y1, z1-7);
-			manual->position(  x1,  y1, z1);
-			manual->position(  x1,  y1, z1-7);
-			manual->position( 2.5, 0.0, z1-7);
-
-			for(int i = 0; i < 19; i++){
-				manual->index(i);
-			}
 
 		manual->end();
-		Ogre::String naveBase01 = "MeshNaveBase01";
-		manual->convertToMesh(naveBase01);
-
-		Ogre::Entity* entNave = mSceneMgr->createEntity(naveBase01);
-		Ogre::SceneNode* nodoNaveBase = mSceneMgr->createSceneNode("NodoNaveBase");
-		mSceneMgr->getRootSceneNode()->addChild(nodoNaveBase);
-		nodoNaveBase->attachObject(entNave);
-
-		ManualObject* manual2 = mSceneMgr->createManualObject("manual2");
-		manual2->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
-
-			manual2->position(-0.8, 0.0, z2);
-			manual2->position( -x2, -y2, z2);
-			manual2->position( -x2,  y2, z2);
-			manual2->position(  x2, -y2, z2);
-			manual2->position(  x2,  y2, z2);
-			manual2->position( 0.8, 0.0, z2);
-			//lados
-			manual2->position( 2.5, 0.0, z2+7);
-			manual2->position(  x2, -y2, z2);
-			manual2->position(  x1, -y1, z2+7);
-			manual2->position( -x2, -y2, z2);
-			manual2->position( -x1, -y1, z2+7);
-			manual2->position(-0.8, 0.0, z2);
-			manual2->position(-2.5, 0.0, z2+7);
-			manual2->position( -x2,  y2, z2);
-			manual2->position( -x1,  y1, z2+7);
-			manual2->position(  x2,  y2, z2);
-			manual2->position(  x1,  y1, z2+7);
-			manual2->position( 2.5, 0.0, z2+7);
-
-			for(int i = 0; i < 19; i++){
-				manual2->index(i);
-			}
-  
-		manual2->end();
-		Ogre::String naveBase02 = "MeshNaveBase02";
-		manual2->convertToMesh(naveBase02);
-
-		Ogre::Entity* entNaveBase02 = mSceneMgr->createEntity(naveBase02);
-		Ogre::SceneNode* nodoNaveBase02 = mSceneMgr->createSceneNode("NodoNaveBase02");
-		nodoNaveBase->addChild(nodoNaveBase02);
-		nodoNaveBase02->attachObject(entNaveBase02);
+		mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(manual);
 
 		/*
 			**********  FIN NAVE  **********
