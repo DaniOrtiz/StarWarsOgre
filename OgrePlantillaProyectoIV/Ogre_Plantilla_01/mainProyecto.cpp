@@ -6,12 +6,29 @@ class Example1 : public ExampleApplication
 
 public:
 
-	void crearAlas(Ogre::ManualObject* manualAla, float x1, float x2, float y) {
+	void crearAlasIzq(Ogre::ManualObject* manualAla, float x1, float x2, float y) {
 
 		manualAla->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
 
 			manualAla->position( x2, y, 5);
 			manualAla->position( x1, y, 6);
+			manualAla->position( x2, y, 1);
+			manualAla->position( x1, y, 0);
+
+			for(int i = 0; i < 5; i++){
+				manualAla->index(i);
+			}
+
+		manualAla->end();
+	}
+
+	void crearAlasDer(Ogre::ManualObject* manualAla, float x1, float x2, float y) {
+
+		manualAla->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
+
+
+			manualAla->position( x1, y, 6);
+			manualAla->position( x2, y, 5);
 			manualAla->position( x2, y, 1);
 			manualAla->position( x1, y, 0);
 
@@ -190,96 +207,82 @@ public:
 		/*
 			**********  ALAS  **********
 		*/
-		//caras de la ala izq
+		//CARAS IZQUIERDAS ALAS
+		Ogre::ManualObject* manualCaraAlaI02 = mSceneMgr->createManualObject("manualCaraAlaI02");
+		crearAlasIzq(manualCaraAlaI02, -2, -7, 1.0);
+		manualCaraAlaI02->convertToMesh("MeshAlaI02");
+		Ogre::Entity* entAlaI02 = mSceneMgr->createEntity("MeshAlaI02");
+		Ogre::SceneNode* nodoAlaI02 = mSceneMgr->createSceneNode("NodoAlaI02");
+		mSceneMgr->getRootSceneNode()->addChild(nodoAlaI02);
+		nodoAlaI02->roll(Ogre::Degree( -10 ) );
+		//nodoNave->addChild(nodoAlaI02);
+		nodoAlaI02->attachObject(entAlaI02);
+
+		//Ogre::ManualObject* manualCaraAlaI02a = mSceneMgr->createManualObject("manualCaraAlaI02a");
+		//crearAlasIzq(manualCaraAlaI02a, -2, -7, 0.5);
+		//manualCaraAlaI02a->convertToMesh("MeshAlaI02a");
+		//Ogre::Entity* entAlaI02a = mSceneMgr->createEntity("MeshAlaI02a");
+		//Ogre::SceneNode* nodoAlaI02a = mSceneMgr->createSceneNode("NodoAlaI02a");
+		//nodoAlaI02->addChild(nodoAlaI02a);
+		//nodoAlaI02a->attachObject(entAlaI02a);
+
+		Ogre::ManualObject* manualCaraAlaI01 = mSceneMgr->createManualObject("manualCaraAlaI01");
+		crearAlasIzq(manualCaraAlaI01,-2, -7, 0.5);
+		manualCaraAlaI01->convertToMesh("MeshAlaI01");
+		Ogre::Entity* entAlaI01 = mSceneMgr->createEntity("MeshAlaI01");
+		Ogre::SceneNode* nodoAlaI01 = mSceneMgr->createSceneNode("NodoAlaI01");
+		mSceneMgr->getRootSceneNode()->addChild(nodoAlaI01);
+		nodoAlaI01->roll(Ogre::Degree( 10 ) );
+		nodoAlaI01->attachObject(entAlaI01);
+
+		//Ogre::ManualObject* manualCaraAlaI01 = mSceneMgr->createManualObject("manualCaraAlaI01");
+		//crearAlasIzq(manualCaraAlaI01, -2, -7, 0.0);
+		//manualCaraAlaI01->convertToMesh("MeshAlaI01");
+		//Ogre::Entity* entAlaI01 = mSceneMgr->createEntity("MeshAlaI01");
+		//Ogre::SceneNode* nodoAlaI01 = mSceneMgr->createSceneNode("NodoAlaI01");
+		//mSceneMgr->getRootSceneNode()->addChild(nodoAlaI01);
+		//nodoNave->addChild(nodoAlaI01);
+		//nodoAlaI01->attachObject(entAlaI01);
 
 
-		Ogre::ManualObject* manualCaraAla01 = mSceneMgr->createManualObject("manualCaraAla01");
-		manualCaraAla01->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
 
-			manualCaraAla01->position( -7, 1.0, 5);
-			manualCaraAla01->position( -2, 1.0, 6);
-			manualCaraAla01->position( -7, 1.0, 1);
-			manualCaraAla01->position( -2, 1.0, 0);
+		//CARAS DERECHAS ALAS
 
-			for(int i = 0; i < 5; i++){
-				manualCaraAla01->index(i);
-			}
+		Ogre::ManualObject* manualCaraAlaD02 = mSceneMgr->createManualObject("manualCaraAlaD02");
+		crearAlasDer(manualCaraAlaD02, 2, 7, 1.0);
+		manualCaraAlaD02->convertToMesh("MeshAlaD02");
+		Ogre::Entity* entAlaD02 = mSceneMgr->createEntity("MeshAlaD02");
+		Ogre::SceneNode* nodoAlaD02 = mSceneMgr->createSceneNode("NodoAlaD02");
+		mSceneMgr->getRootSceneNode()->addChild(nodoAlaD02);
+		nodoAlaD02->roll(Ogre::Degree( 10 ) );
+		//nodoNave->addChild(nodoAlaD02);
+		nodoAlaD02->attachObject(entAlaD02);
 
-		manualCaraAla01->end();
-		//crearAlas(manualCaraAla01, -2, -7, 0.0);
-		manualCaraAla01->convertToMesh("MeshAla01");
-		Ogre::Entity* entAla01 = mSceneMgr->createEntity("MeshAla01");
-		Ogre::SceneNode* nodoAla01 = mSceneMgr->createSceneNode("NodoAla01");
-		mSceneMgr->getRootSceneNode()->addChild(nodoAla01);
-		//nodoNave->addChild(nodoAla01);
-		nodoAla01->attachObject(entAla01);
+		//Ogre::ManualObject* manualCaraAlaD02a = mSceneMgr->createManualObject("manualCaraAlaD02a");
+		//crearAlasDer(manualCaraAlaD02a, 2, 7, 0.5);
+		//manualCaraAlaD02a->convertToMesh("MeshAlaD02a");
+		//Ogre::Entity* entAlaD02a = mSceneMgr->createEntity("MeshAlaD02a");
+		//Ogre::SceneNode* nodoAlaD02a = mSceneMgr->createSceneNode("NodoAlaD02a");
+		//nodoAlaD02->addChild(nodoAlaD02a);
+		//nodoAlaD02a->attachObject(entAlaD02a);
 
+		//Ogre::ManualObject* manualCaraAlaD01 = mSceneMgr->createManualObject("manualCaraAlaD01");
+		//crearAlasDer(manualCaraAlaD01, 2, 7, 0.0);
+		//manualCaraAlaD01->convertToMesh("MeshAlaD01");
+		//Ogre::Entity* entAlaD01 = mSceneMgr->createEntity("MeshAlaD01");
+		//Ogre::SceneNode* nodoAlaD01 = mSceneMgr->createSceneNode("NodoAlaD01");
+		//mSceneMgr->getRootSceneNode()->addChild(nodoAlaD01);
+		//nodoNave->addChild(nodoAlaD01);
+		//nodoAlaD01->attachObject(entAlaD01);
 
-		Ogre::ManualObject* manualCaraAla01a = mSceneMgr->createManualObject("manualCaraAla01a");
-		manualCaraAla01a->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
-
-			manualCaraAla01a->position( -7, 0.5, 5);
-			manualCaraAla01a->position( -2, 0.5, 6);
-			manualCaraAla01a->position( -7, 0.5, 1);
-			manualCaraAla01a->position( -2, 0.5, 0);
-
-			for(int i = 0; i < 5; i++){
-				manualCaraAla01a->index(i);
-			}
-
-		manualCaraAla01a->end();
-		//crearAlas(manualCaraAla01a,-2, -7, 0.5);
-		manualCaraAla01a->convertToMesh("MeshAla01a");
-		Ogre::Entity* entAla01a = mSceneMgr->createEntity("MeshAla01a");
-		Ogre::SceneNode* nodoAla01a = mSceneMgr->createSceneNode("NodoAla01a");
-		mSceneMgr->getRootSceneNode()->addChild(nodoAla01a);
-		//nodoNave->addChild(nodoAla01a);
-		nodoAla01a->attachObject(entAla01a);
-
-
-		Ogre::ManualObject* manualCaraAla02 = mSceneMgr->createManualObject("manualCaraAla02");
-		manualCaraAla02->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
-
-			manualCaraAla02->position( -7, 0.0, 5);
-			manualCaraAla02->position( -2, 0.0, 6);
-			manualCaraAla02->position( -7, 0.0, 1);
-			manualCaraAla02->position( -2, 0.0, 0);
-
-			for(int i = 0; i < 5; i++){
-				manualCaraAla02->index(i);
-			}
-
-		manualCaraAla02->end();
-		//crearAlas(manualCaraAla02, -2, -7, 1.0);
-		manualCaraAla02->convertToMesh("MeshAla02");
-		Ogre::Entity* entAla02 = mSceneMgr->createEntity("MeshAla02");
-		Ogre::SceneNode* nodoAla02 = mSceneMgr->createSceneNode("NodoAla02");
-		mSceneMgr->getRootSceneNode()->addChild(nodoAla02);
-		//nodoNave->addChild(nodoAla02);
-		nodoAla02->attachObject(entAla02);
-
-
-		Ogre::ManualObject* manualCaraAla02a = mSceneMgr->createManualObject("manualCaraAla02a");
-		manualCaraAla02a->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
-
-			manualCaraAla02a->position( -7, 0.5, 5);
-			manualCaraAla02a->position( -2, 0.5, 6);
-			manualCaraAla02a->position( -7, 0.5, 1);
-			manualCaraAla02a->position( -2, 0.5, 0);
-
-			for(int i = 0; i < 5; i++){
-				manualCaraAla02a->index(i);
-			}
-
-		manualCaraAla02a->end();
-		//crearAlas(manualCaraAla02a, -2, -7, 0.5);
-		manualCaraAla02a->convertToMesh("MeshAla02a");
-		Ogre::Entity* entAla02a = mSceneMgr->createEntity("MeshAla02a");
-		Ogre::SceneNode* nodoAla02a = mSceneMgr->createSceneNode("NodoAla02a");
-		mSceneMgr->getRootSceneNode()->addChild(nodoAla02a);
-		//nodoNave->addChild(nodoAla02a);
-		nodoAla02a->attachObject(entAla02a);
-
+		Ogre::ManualObject* manualCaraAlaD01 = mSceneMgr->createManualObject("manualCaraAlaD01");
+		crearAlasDer(manualCaraAlaD01,2, 7, 0.5);
+		manualCaraAlaD01->convertToMesh("MeshAlaD01");
+		Ogre::Entity* entAlaD01 = mSceneMgr->createEntity("MeshAlaD01");
+		Ogre::SceneNode* nodoAlaD01 = mSceneMgr->createSceneNode("NodoAlaD01");
+		mSceneMgr->getRootSceneNode()->addChild(nodoAlaD01);
+		nodoAlaD01->roll(Ogre::Degree( -10 ) );
+		nodoAlaD01->attachObject(entAlaD01);
 
 		/*
 			**********  FIN NAVE  **********
