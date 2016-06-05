@@ -4,6 +4,12 @@ float r = 1.0;
 float xnave = 0.0, ynave = 0.0, znave = 0.0;
 float ang = 0.0;
 
+Ogre::AnimationState* animationLaser01;
+Ogre::AnimationState* animationLaser02;
+Ogre::AnimationState* animationLaser03;
+Ogre::AnimationState* animationLaser04;
+
+
 class FrameListenerClase : public Ogre::FrameListener { // Hereda de la clase FrameListener de Ogre, escucha algo
 
 private:
@@ -21,27 +27,21 @@ private:
 
 public:
 	// Constructor que le asignamos el nodo que creamos
-	FrameListenerClase(Ogre::SceneNode* nodoNave01, 
-					   Ogre::Camera* cam, 
-					   RenderWindow* win) {
-		
+	FrameListenerClase(Ogre::SceneNode* nodoNave01, Ogre::Camera* cam, RenderWindow* win) {
+
 /*
 		// Create the camera's top node (which will only handle position).
 		this->cameraNode = this->sceneManager->getRootSceneNode()->createChildSceneNode();
 		this->cameraNode->setPosition(0, 0, 500);
-
 		// Create the camera's yaw node as a child of camera's top node.
 		this->cameraYawNode = this->cameraNode->createChildSceneNode();
-
 		// Create the camera's pitch node as a child of camera's yaw node.
 		this->cameraPitchNode = this->cameraYawNode->createChildSceneNode();
-
 		// Create the camera's roll node as a child of camera's pitch node
 		// and attach the camera to it.
 		this->cameraRollNode = this->cameraPitchNode->createChildSceneNode();
 		this->cameraRollNode->attachObject(this->camera);
 */
-
 		// Configuracion captura teclado y mouse
 		// ESTO ES ASI PORQUE SI, NO CAMBIA
 		size_t windowHnd = 0;
@@ -60,6 +60,7 @@ public:
 
 		_nodoNave = nodoNave01;
 		_cam = cam;
+
 	}
 
 	~FrameListenerClase() {
@@ -68,6 +69,8 @@ public:
 		OIS::InputManager::destroyInputSystem(_man);
 	}
 
+	// Funcion que viene con ogre, se llama constantemente, para saber que esta pasando NO CONFUNDIR CON RENDER
+	// ESTO HACE QUE EL OBJETO SE "ANIME" o se mueva
 	bool frameStarted(const Ogre::FrameEvent &evt) {
 			
 		_key->capture();
@@ -98,7 +101,7 @@ public:
 		// Si presionamos la tecla d
 		if(_key->isKeyDown(OIS::KC_D))
 			tcam += Ogre::Vector3(10,0,0);
-		
+
 		// Camara Control
 		float rotX = _mouse->getMouseState().X.rel * evt.timeSinceLastFrame * -1;
 		float rotY = _mouse->getMouseState().Y.rel * evt.timeSinceLastFrame * -1;
@@ -106,9 +109,16 @@ public:
 		_cam->pitch(Ogre::Radian(rotY));
 		_cam->moveRelative(tcam*movSpeed*evt.timeSinceLastFrame);
 
-		//_nodoNave->translate(tcam*movSpeed*evt.timeSinceLastFrame);
-		//_nodoNave->yaw(Ogre::Radian(rotX));
-		//_nodoNave->pitch(Ogre::Radian(rotY));
+		_nodoNave->translate(tcam*movSpeed*evt.timeSinceLastFrame);
+		_nodoNave->yaw(Ogre::Radian(rotX));
+		_nodoNave->pitch(Ogre::Radian(rotY));
+
+		//Animacion de los Laser
+		
+		animationLaser01 -> addTime(evt.timeSinceLastFrame);
+		animationLaser02 -> addTime(evt.timeSinceLastFrame);
+		animationLaser03 -> addTime(evt.timeSinceLastFrame);
+		animationLaser04 -> addTime(evt.timeSinceLastFrame);
 		return true;
 	}
 };
@@ -117,35 +127,14 @@ class Example1 : public ExampleApplication
 {
 
 public:
-	Ogre::SceneNode* nodoNave;
-	Ogre::FrameListener* FrameListener01; // Objeto de FrameListener
-
-	//Ogre::SceneNode* nodeCamara;
-
-	// Constructor
-	Example1() {
-		FrameListener01 = NULL;
-	}
-
-	// Para destruir la variable FrameListener cuando acabe el programa
-	~Example1() {
-		if (FrameListener01) {
-			delete FrameListener01;
-		}
-	}
-
-	// Metodo
-	void createFrameListener() {
-		FrameListener01 = new FrameListenerClase(nodoNave,mCamera, mWindow); 
-		mRoot->addFrameListener(FrameListener01);
-	}
 
 	void createCamera() {
 
 		mCamera = mSceneMgr->createCamera("MyCamera1");
-		mCamera->setPosition(0.0,0.0,30);
+		mCamera->setPosition(0,10,50);
 		mCamera->lookAt(0,0,-50);
 		mCamera->setNearClipDistance(5);
+
 	}
 
 	void createScene()
@@ -187,13 +176,26 @@ public:
 			"Cuerpo", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 
 		Ogre::TextureUnitState* torretaTexture =
-			materialTorretas ->getTechnique(0) ->getPass(0)->createTextureUnitState("tex_mTorretas01.png");
+			materialTorretas ->getTechnique(0) ->getPass(0)->createTextureUnitState("RustySteel.jpg");
 		
 		Ogre::MaterialPtr materialTorretas2 = Ogre::MaterialManager::getSingleton().create(
 			"OtrasPartes", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 
 		Ogre::TextureUnitState* torretaTexture2 =
-			materialTorretas2 ->getTechnique(0) ->getPass(0)->createTextureUnitState("MtlPlat2.jpg");
+			materialTorretas2 ->getTechnique(0) ->getPass(0)->createTextureUnitState("tex_mTorretas01.png");
+
+		Ogre::MaterialPtr materialTorretas3 = Ogre::MaterialManager::getSingleton().create(
+			"Canon", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+
+		Ogre::TextureUnitState* torretaTexture3 =
+			materialTorretas3 ->getTechnique(0) ->getPass(0)->createTextureUnitState("RustedMetal.jpg");
+
+		Ogre::MaterialPtr materialLaser = Ogre::MaterialManager::getSingleton().create(
+			"Laser", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+
+		Ogre::TextureUnitState* laserTexture =
+			materialLaser ->getTechnique(0) ->getPass(0)->createTextureUnitState("nm_up.png");
+
 
 		/*******************************************************	
 					  _ __   __ ___   _____ 
@@ -230,7 +232,7 @@ public:
 		manual->end();
 		manual->convertToMesh("MeshNave");
 		Ogre::Entity* entNave = mSceneMgr->createEntity("MeshNave");
-		nodoNave = mSceneMgr->createSceneNode("NodoNave");
+		Ogre::SceneNode* nodoNave = mSceneMgr->createSceneNode("NodoNave");
 		mSceneMgr->getRootSceneNode()->addChild(nodoNave);
 		nodoNave->attachObject(entNave);
 		nodoNave->translate(0.0,-5,0.0);
@@ -387,8 +389,8 @@ public:
 			**********  FIN NAVE  **********
 		*/
 
-
 		// Creando Torretas
+
 		// TORRETA 1 - Primera de la izquierda
 
 		// Cuerpo de la Torreta
@@ -409,23 +411,24 @@ public:
 		entCurva01->setMaterial(materialTorretas2);
 
 		// Canon de la torreta
-		
 		Ogre::Entity* entCanon01 = mSceneMgr->createEntity("usb_cilindro.mesh");
 		Ogre::SceneNode* nodoCanon01 = mSceneMgr->createSceneNode("NodoCanon01");
 		nodoTorreta01->addChild(nodoCanon01);
-		nodoCanon01->setPosition(0.0,6.5,4.0);
-		nodoCanon01->setScale(0.1,0.8,0.1);
+		nodoCanon01->setPosition(0.0,7.0,3.7);
+		nodoCanon01->setScale(0.1,0.6,0.1);
 		nodoCanon01->yaw(Degree(5));		// variar los angulos para que apunten al centro
 		nodoCanon01->pitch(Degree(90));
 		nodoCanon01->attachObject(entCanon01);
+		entCanon01->setMaterial(materialTorretas3);
 
-		// Pipe para el Canon (Hacer luego)
-		/*Ogre::Entity* entPipeC01 = mSceneMgr->createEntity("usb_cilindro.mesh");
-		Ogre::SceneNode* nodoPipeC01 = mSceneMgr->createSceneNode("NodoPipeC01");
-		nodoCanon01->addChild(nodoPipeC01);
-		nodoPipeC01->setPosition(0.0,6.0,0.0);
-		nodoPipeC01->setScale(0.0,0.6,0.0);
-		nodoPipeC01->attachObject(entPipeC01);*/
+		// Punta del Canon 
+		Ogre::Entity* entPuntaC01 = mSceneMgr->createEntity("usb_cilindro.mesh");
+		Ogre::SceneNode* nodoPuntaC01 = mSceneMgr->createSceneNode("NodoPuntaC01");
+		nodoCanon01->addChild(nodoPuntaC01);
+		nodoPuntaC01->setPosition(0.0,6.0,0.0);
+		nodoPuntaC01->setScale(1.4,0.1,1.4);
+		entPuntaC01->setMaterial(materialTorretas2);
+		nodoPuntaC01->attachObject(entPuntaC01);
 
 		// Pipe para la base de la torreta
 		Ogre::Entity* entPipe01 = mSceneMgr->createEntity("usb_pipe.mesh");
@@ -437,15 +440,39 @@ public:
 		entPipe01->setMaterial(materialTorretas2);
 
 		// Laser de la torreta
-		
 		Ogre::Entity* entLaser01 = mSceneMgr->createEntity("usb_laser.mesh");
 		Ogre::SceneNode* nodoLaser01 = mSceneMgr->createSceneNode("NodoLaser01");
 		nodoCanon01->addChild(nodoLaser01);
 		nodoLaser01->attachObject(entLaser01);
-		// nodoLaser01->setPosition(0.0,6.5,4.0); // arreglar la posicion no está donde deberia
+		entLaser01->setMaterial(materialLaser);
+		nodoLaser01->setPosition(0.0,10.5,0.0);
+		
+		// Animacion del Laser
+		
+		float duration = 4.0f;
+		Ogre::Animation* animationLaserT01 = mSceneMgr -> createAnimation("animationLaserT01",duration);
+		animationLaserT01 -> setInterpolationMode(Animation::IM_SPLINE);
+		Ogre::NodeAnimationTrack* trackLaser01 = animationLaserT01->createNodeTrack(0,nodoLaser01);
+		Ogre::TransformKeyFrame* key;
+		key = trackLaser01 -> createNodeKeyFrame(0.0);
+		key -> setTranslate(Vector3(0.0,0.0,0.0));
+		key -> setScale(Vector3(0.0,0.0,0.0));
+		//key -> setRotation(Quaternion(1,1,0,0));		
+		key = trackLaser01 -> createNodeKeyFrame(0.5);
+		key -> setTranslate(Vector3(0.0,0.0,0.0));
+		key -> setScale(Vector3(0.0,0.0,0.0));
+		//key -> setRotation(Quaternion(1,1,0,0));
+		key = trackLaser01 -> createNodeKeyFrame(1.0);
+		key -> setTranslate(Vector3(0.0,0.0,0.0));
+		key -> setScale(Vector3(0.0,0.0,0.0));
+		//key -> setRotation(Quaternion(1,1,0,0));
+		
+		animationLaser01 = mSceneMgr -> createAnimationState("animationLaserT01");
+		animationLaser01 -> setEnabled(true);
+		animationLaser01 -> setLoop(true);
 		
 
-		// TORRETA 2 - Segunda a la izquierda
+		// TORRETA 2 - Segunda de la izquierda
 
 		// Cuerpo de la Torreta
 		Ogre::Entity* entTorreta02 = mSceneMgr->createEntity("usb_cilindro02.mesh");
@@ -454,6 +481,7 @@ public:
 		nodoTorreta02->setPosition(-22.5,-5.0,-638.0);
 		nodoTorreta02->attachObject(entTorreta02);
 		entTorreta02->setMaterial(materialTorretas);
+		//entTorreta02->setMaterialName("Examples/SphereMappedRustySteell");
 
 		// Forma para la parte de arriba de la torreta
 		Ogre::Entity* entCurva02 = mSceneMgr->createEntity("usb_formacurva.mesh");
@@ -468,11 +496,21 @@ public:
 		Ogre::Entity* entCanon02 = mSceneMgr->createEntity("usb_cilindro.mesh");
 		Ogre::SceneNode* nodoCanon02 = mSceneMgr->createSceneNode("NodoCanon02");
 		nodoTorreta02->addChild(nodoCanon02);
-		nodoCanon02->setPosition(0.0,6.5,4.0);
-		nodoCanon02->setScale(0.1,0.8,0.1);
+		nodoCanon02->setPosition(0.0,7.0,3.7);
+		nodoCanon02->setScale(0.1,0.6,0.1);
 		nodoCanon02->yaw(Degree(5));		// variar los angulos para que apunten al centro
 		nodoCanon02->pitch(Degree(90));
 		nodoCanon02->attachObject(entCanon02);
+		entCanon02->setMaterial(materialTorretas3);
+
+		// Punta del Canon 
+		Ogre::Entity* entPuntaC02 = mSceneMgr->createEntity("usb_cilindro.mesh");
+		Ogre::SceneNode* nodoPuntaC02 = mSceneMgr->createSceneNode("NodoPuntaC02");
+		nodoCanon02->addChild(nodoPuntaC02);
+		nodoPuntaC02->setPosition(0.0,6.0,0.0);
+		nodoPuntaC02->setScale(1.4,0.1,1.4);
+		entPuntaC02->setMaterial(materialTorretas2);
+		nodoPuntaC02->attachObject(entPuntaC02);
 
 		// Pipe para la base de la torreta
 		Ogre::Entity* entPipe02 = mSceneMgr->createEntity("usb_pipe.mesh");
@@ -484,14 +522,38 @@ public:
 		entPipe02->setMaterial(materialTorretas2);
 
 		// Laser de la torreta
-		/*
 		Ogre::Entity* entLaser02 = mSceneMgr->createEntity("usb_laser.mesh");
 		Ogre::SceneNode* nodoLaser02 = mSceneMgr->createSceneNode("NodoLaser02");
-		nodoTorreta02->addChild(nodoLaser02);
-		nodoLaser02->setPosition(0.0,0.0,0.0);
+		nodoCanon02->addChild(nodoLaser02);
+		nodoLaser02->setPosition(0.0,10.5,0.0);
 		nodoLaser02->attachObject(entLaser02);
-		*/
-		// TORRETA 3 - Primera a la derecha
+		entLaser02->setMaterial(materialLaser);
+
+		// Animacion del Laser
+		
+		float duration2 = 4.0f;
+		Ogre::Animation* animationLaserT02 = mSceneMgr -> createAnimation("animationLaserT02",duration);
+		animationLaserT02 -> setInterpolationMode(Animation::IM_SPLINE);
+		Ogre::NodeAnimationTrack* trackLaser02 = animationLaserT02->createNodeTrack(0,nodoLaser02);
+		Ogre::TransformKeyFrame* key2;
+		key2 = trackLaser02 -> createNodeKeyFrame(0.0);
+		key2 -> setTranslate(Vector3(0.0,0.0,0.0));
+		key2 -> setScale(Vector3(0.0,0.0,0.0));
+		//key -> setRotation(Quaternion(1,1,0,0));		
+		key2 = trackLaser02 -> createNodeKeyFrame(0.5);
+		key2 -> setTranslate(Vector3(0.0,0.0,0.0));
+		key2 -> setScale(Vector3(0.0,0.0,0.0));
+		//key2 -> setRotation(Quaternion(1,1,0,0));
+		key2 = trackLaser02 -> createNodeKeyFrame(1.0);
+		key2 -> setTranslate(Vector3(0.0,0.0,0.0));
+		key2 -> setScale(Vector3(0.0,0.0,0.0));
+		//key2 -> setRotation(Quaternion(1,1,0,0));
+		
+		animationLaser02 = mSceneMgr -> createAnimationState("animationLaserT02");
+		animationLaser02 -> setEnabled(true);
+		animationLaser02 -> setLoop(true);
+		
+		// TORRETA 3 - Primera de la derecha
 		
 		// Cuerpo de la Torreta
 		Ogre::Entity* entTorreta03 = mSceneMgr->createEntity("usb_cilindro02.mesh");
@@ -514,11 +576,21 @@ public:
 		Ogre::Entity* entCanon03 = mSceneMgr->createEntity("usb_cilindro.mesh");
 		Ogre::SceneNode* nodoCanon03 = mSceneMgr->createSceneNode("NodoCanon03");
 		nodoTorreta03->addChild(nodoCanon03);
-		nodoCanon03->setPosition(0.0,6.5,4.0);
-		nodoCanon03->setScale(0.1,0.8,0.1);
+		nodoCanon03->setPosition(0.0,7.0,3.7);
+		nodoCanon03->setScale(0.1,0.6,0.1);
 		nodoCanon03->yaw(Degree(-5));		// variar los angulos para que apunten al centro
 		nodoCanon03->pitch(Degree(90));
 		nodoCanon03->attachObject(entCanon03);
+		entCanon03->setMaterial(materialTorretas3);
+
+		// Punta del Canon 
+		Ogre::Entity* entPuntaC03 = mSceneMgr->createEntity("usb_cilindro.mesh");
+		Ogre::SceneNode* nodoPuntaC03 = mSceneMgr->createSceneNode("NodoPuntaC03");
+		nodoCanon03->addChild(nodoPuntaC03);
+		nodoPuntaC03->setPosition(0.0,6.0,0.0);
+		nodoPuntaC03->setScale(1.4,0.1,1.4);
+		entPuntaC03->setMaterial(materialTorretas2);
+		nodoPuntaC03->attachObject(entPuntaC03);
 
 		// Pipe para la base de la torreta
 		Ogre::Entity* entPipe03 = mSceneMgr->createEntity("usb_pipe.mesh");
@@ -530,15 +602,39 @@ public:
 		entPipe03->setMaterial(materialTorretas2);
 
 		// Laser de la torreta
-		/*
 		Ogre::Entity* entLaser03 = mSceneMgr->createEntity("usb_laser.mesh");
 		Ogre::SceneNode* nodoLaser03 = mSceneMgr->createSceneNode("NodoLaser03");
-		nodoTorreta03->addChild(nodoLaser03);
-		nodoLaser03->setPosition(0.0,0.0,0.0);
+		nodoCanon03->addChild(nodoLaser03);
+		nodoLaser03->setPosition(0.0,10.5,0.0);
 		nodoLaser03->attachObject(entLaser03);
-		*/
+		entLaser03->setMaterial(materialLaser);
+
+		// Animacion del Laser
 		
-		// TORRETA 4 - Segunda a la derecha
+		//float duration3 = 4.0f;
+		Ogre::Animation* animationLaserT03 = mSceneMgr -> createAnimation("animationLaserT03",duration);
+		animationLaserT03 -> setInterpolationMode(Animation::IM_SPLINE);
+		Ogre::NodeAnimationTrack* trackLaser03 = animationLaserT03->createNodeTrack(0,nodoLaser03);
+		Ogre::TransformKeyFrame* key3;
+		key3 = trackLaser03 -> createNodeKeyFrame(0.0);
+		key3 -> setTranslate(Vector3(0.0,0.0,0.0));
+		key3 -> setScale(Vector3(0.0,0.0,0.0));
+		//key3 -> setRotation(Quaternion(1,1,0,0));		
+		key3 = trackLaser03 -> createNodeKeyFrame(0.5);
+		key3 -> setTranslate(Vector3(0.0,0.0,0.0));
+		key3 -> setScale(Vector3(0.0,0.0,0.0));
+		//key3 -> setRotation(Quaternion(1,1,0,0));
+		key3 = trackLaser03 -> createNodeKeyFrame(1.0);
+		key3 -> setTranslate(Vector3(0.0,0.0,0.0));
+		key3 -> setScale(Vector3(0.0,0.0,0.0));
+		//key3 -> setRotation(Quaternion(1,1,0,0));
+		
+		animationLaser03 = mSceneMgr -> createAnimationState("animationLaserT03");
+		animationLaser03 -> setEnabled(true);
+		animationLaser03 -> setLoop(true);
+		
+		
+		// TORRETA 4 - Segunda de la derecha
 
 		// Cuerpo de la Torreta
 		Ogre::Entity* entTorreta04 = mSceneMgr->createEntity("usb_cilindro02.mesh");
@@ -561,12 +657,21 @@ public:
 		Ogre::Entity* entCanon04 = mSceneMgr->createEntity("usb_cilindro.mesh");
 		Ogre::SceneNode* nodoCanon04 = mSceneMgr->createSceneNode("NodoCanon04");
 		nodoTorreta04->addChild(nodoCanon04);
-		nodoCanon04->setPosition(0.0,6.5,4.0);
-		nodoCanon04->setScale(0.1,0.8,0.1);
+		nodoCanon04->setPosition(0.0,7.0,3.7);
+		nodoCanon04->setScale(0.1,0.6,0.1);
 		nodoCanon04->yaw(Degree(-5));		// variar los angulos para que apunten al centro
 		nodoCanon04->pitch(Degree(90));
 		nodoCanon04->attachObject(entCanon04);
+		entCanon04->setMaterial(materialTorretas3);
 		
+		// Punta del Canon 
+		Ogre::Entity* entPuntaC04 = mSceneMgr->createEntity("usb_cilindro.mesh");
+		Ogre::SceneNode* nodoPuntaC04 = mSceneMgr->createSceneNode("NodoPuntaC04");
+		nodoCanon04->addChild(nodoPuntaC04);
+		nodoPuntaC04->setPosition(0.0,6.0,0.0);
+		nodoPuntaC04->setScale(1.4,0.1,1.4);
+		entPuntaC04->setMaterial(materialTorretas2);
+		nodoPuntaC04->attachObject(entPuntaC04);
 
 		// Pipe para la base de la torreta
 		Ogre::Entity* entPipe04 = mSceneMgr->createEntity("usb_pipe.mesh");
@@ -578,14 +683,37 @@ public:
 		entPipe04->setMaterial(materialTorretas2);
 
 		// Laser de la torreta
-		/*
 		Ogre::Entity* entLaser04 = mSceneMgr->createEntity("usb_laser.mesh");
 		Ogre::SceneNode* nodoLaser04 = mSceneMgr->createSceneNode("NodoLaser04");
-		nodoTorreta04->addChild(nodoLaser04);
-		nodoLaser04->setPosition(0.0,0.0,0.0);
+		nodoCanon04->addChild(nodoLaser04);
+		nodoLaser04->setPosition(0.0,10.5,0.0);
 		nodoLaser04->attachObject(entLaser04);
-		*/
+		entLaser04->setMaterial(materialLaser);
 
+		// Animacion del Laser
+		
+		float duration4 = 4.0f;
+		Ogre::Animation* animationLaserT04 = mSceneMgr -> createAnimation("animationLaserT04",duration);
+		animationLaserT04 -> setInterpolationMode(Animation::IM_SPLINE);
+		Ogre::NodeAnimationTrack* trackLaser04 = animationLaserT04->createNodeTrack(0,nodoLaser04);
+		Ogre::TransformKeyFrame* key4;
+		key4 = trackLaser04 -> createNodeKeyFrame(0.0);
+		key4 -> setTranslate(Vector3(0.0,0.0,0.0));
+		key4 -> setScale(Vector3(0.0,0.0,0.0));
+		//key4 -> setRotation(Quaternion(1,1,0,0));		
+		key4 = trackLaser04 -> createNodeKeyFrame(0.5);
+		key4 -> setTranslate(Vector3(0.0,0.0,0.0));
+		key4 -> setScale(Vector3(0.0,0.0,0.0));
+		//key4 -> setRotation(Quaternion(1,1,0,0));
+		key4 = trackLaser04 -> createNodeKeyFrame(1.0);
+		key4 -> setTranslate(Vector3(0.0,0.0,0.0));
+		key4 -> setScale(Vector3(0.0,0.0,0.0));
+		//key4 -> setRotation(Quaternion(1,1,0,0));
+		
+		animationLaser04 = mSceneMgr -> createAnimationState("animationLaserT04");
+		animationLaser04 -> setEnabled(true);
+		animationLaser04 -> setLoop(true);
+		
 	}
 
 };
