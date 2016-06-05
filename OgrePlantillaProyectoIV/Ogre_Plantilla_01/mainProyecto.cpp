@@ -6,39 +6,6 @@ class Example1 : public ExampleApplication
 
 public:
 
-	void crearAlasIzq(Ogre::ManualObject* manualAla, float x1, float x2, float y) {
-
-		manualAla->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
-
-			manualAla->position( x2, y, 5);
-			manualAla->position( x1, y, 6);
-			manualAla->position( x2, y, 1);
-			manualAla->position( x1, y, 0);
-
-			for(int i = 0; i < 5; i++){
-				manualAla->index(i);
-			}
-
-		manualAla->end();
-	}
-
-	void crearAlasDer(Ogre::ManualObject* manualAla, float x1, float x2, float y) {
-
-		manualAla->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
-
-
-			manualAla->position( x1, y, 6);
-			manualAla->position( x2, y, 5);
-			manualAla->position( x2, y, 1);
-			manualAla->position( x1, y, 0);
-
-			for(int i = 0; i < 5; i++){
-				manualAla->index(i);
-			}
-
-		manualAla->end();
-	}
-
 	void createCamera() {
 
 		mCamera = mSceneMgr->createCamera("MyCamera1");
@@ -95,43 +62,32 @@ public:
 		Ogre::TextureUnitState* torretaTexture2 =
 			materialTorretas2 ->getTechnique(0) ->getPass(0)->createTextureUnitState("MtlPlat2.jpg");
 
-
-		//Cuadricula
-		//Ogre::Entity* entPlanoY = mSceneMgr->createEntity("planoYEnt","cuadriculaY01.mesh");
-		//Ogre::SceneNode* nodePlanoY = mSceneMgr->createSceneNode("nodePlanoY");
-		//mSceneMgr->getRootSceneNode()->addChild(nodePlanoY);
-		//nodePlanoY->setPosition(0.0,0.0,6.0);
-		//nodePlanoY->attachObject(entPlanoY);
-
-		//Ogre::Entity* entPlanoX = mSceneMgr->createEntity("planoXEnt","cuadriculaX01.mesh");
-		//Ogre::SceneNode* nodePlanoX = mSceneMgr->createSceneNode("nodePlanoX");
-		//mSceneMgr->getRootSceneNode()->addChild(nodePlanoX);
-		//nodePlanoX->setPosition(0.0,0.0,6.0);
-		//nodePlanoX->attachObject(entPlanoX);
-
-		/*
-			**********  NAVE  **********
-		
-		const float x1 = 2.0;
+		/*******************************************************	
+					  _ __   __ ___   _____ 
+					 | '_ \ / _` \ \ / / _ \
+					 | | | | (_| |\ V /  __/
+					 |_| |_|\__,_| \_/ \___|
+		*******************************************************/
+		const float x1 = 1.8;
 		const float y1 = 1.7;
 		const float z1 = 6.0;
 		//parte de atras de la nave
 		ManualObject* manual = mSceneMgr->createManualObject("manual");
 		manual->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
 
-			manual->position( 2.5, 0.0, z1-7);
+			manual->position( 2.3, 0.0, z1-7);
 			manual->position(  x1, -y1, z1);
 			manual->position(  x1, -y1, z1-7);
 			manual->position( -x1, -y1, z1);
 			manual->position( -x1, -y1, z1-7);
-			manual->position(-2.5, 0.0, z1);
-			manual->position(-2.5, 0.0, z1-7);
+			manual->position(-2.3, 0.0, z1);
+			manual->position(-2.3, 0.0, z1-7);
 			manual->position( -x1,  y1, z1);
 			manual->position( -x1,  y1, z1-7);
 			manual->position(  x1,  y1, z1);
 			manual->position(  x1,  y1, z1-7);
-			manual->position( 2.5, 0.0, z1);
-			manual->position( 2.5, 0.0, z1-7);
+			manual->position( 2.3, 0.0, z1);
+			manual->position( 2.3, 0.0, z1-7);
 			manual->position(  x1, -y1, z1);
 
 			for(int i = 0; i < 15; i++){
@@ -149,12 +105,12 @@ public:
 		ManualObject* manualCara = mSceneMgr->createManualObject("manualCara");
 		manualCara->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
 
-			manualCara->position(-2.5, 0.0, z1);
+			manualCara->position(-2.3, 0.0, z1);
 			manualCara->position( -x1, -y1, z1);
 			manualCara->position( -x1,  y1, z1);
 			manualCara->position(  x1, -y1, z1);
 			manualCara->position(  x1,  y1, z1);
-			manualCara->position( 2.5, 0.0, z1);
+			manualCara->position( 2.3, 0.0, z1);
 
 			for(int i = 0; i < 7; i++){
 				manualCara->index(i);
@@ -179,13 +135,13 @@ public:
 			manualFrente->position(  x2, -y2, z2);
 			manualFrente->position( -x1, -y1, z2+7);
 			manualFrente->position( -x2, -y2, z2);
-			manualFrente->position(-2.5, 0.0, z2+7);
+			manualFrente->position(-2.3, 0.0, z2+7);
 			manualFrente->position(-0.8, 0.0, z2);
 			manualFrente->position( -x1,  y1, z2+7);
 			manualFrente->position( -x2,  y2, z2);
 			manualFrente->position(  x1,  y1, z2+7);
 			manualFrente->position(  x2,  y2, z2);
-			manualFrente->position( 2.5, 0.0, z2+7);
+			manualFrente->position( 2.3, 0.0, z2+7);
 			manualFrente->position( 0.8, 0.0, z2);
 			manualFrente->position(  x1, -y1, z2+7);
 
@@ -199,90 +155,100 @@ public:
 		Ogre::SceneNode* nodoNaveBase02 = mSceneMgr->createSceneNode("NodoNaveBase02");
 		nodoNave->addChild(nodoNaveBase02);
 		nodoNaveBase02->attachObject(entNaveBase02);
-	*/
 
-
-
-
-		/*
-			**********  ALAS  **********
+		/*	        _           
+			       | |          
+			   __ _| | __ _ ___ 
+			  / _` | |/ _` / __|
+			 | (_| | | (_| \__ \
+			  \__,_|_|\__,_|___/
 		*/
+		//	Mesh de las laas
+		Ogre::ManualObject* manualAlaCara = mSceneMgr->createManualObject("manualAlaCara");
+			manualAlaCara->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
+
+			manualAlaCara->position(2, 1.0, 6);
+			manualAlaCara->position(7, 1.0, 4);
+			manualAlaCara->position(7, 1.0, 2);
+			manualAlaCara->position(2, 1.0, 0);
+
+			for(int i = 0; i < 5; i++){
+				manualAlaCara->index(i);
+			}
+		manualAlaCara->end();
+		manualAlaCara->convertToMesh("MeshAlaCara");
+
+		Ogre::ManualObject* manualAlaBorde = mSceneMgr->createManualObject("manualAlaBorde");
+			manualAlaBorde->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
+
+			manualAlaBorde->position( 2, 1.0, 6);
+			manualAlaBorde->position( 2, 0.5, 6);
+			manualAlaBorde->position( 7, 1.0, 4);
+			manualAlaBorde->position( 7, 0.5, 4);
+			manualAlaBorde->position( 7, 1.0, 2);
+			manualAlaBorde->position( 7, 0.5, 2);
+			manualAlaBorde->position( 2, 1.0, 0);
+			manualAlaBorde->position( 2, 0.5, 0);
+
+			for(int i = 0; i < 9; i++){
+				manualAlaBorde->index(i);
+			}
+		manualAlaBorde->end();
+		manualAlaBorde->convertToMesh("MeshAlaBorde");
+
+		float ang = 10;
+
 		//CARAS IZQUIERDAS ALAS
-		Ogre::ManualObject* manualCaraAlaI02 = mSceneMgr->createManualObject("manualCaraAlaI02");
-		crearAlasIzq(manualCaraAlaI02, -2, -7, 1.0);
-		manualCaraAlaI02->convertToMesh("MeshAlaI02");
-		Ogre::Entity* entAlaI02 = mSceneMgr->createEntity("MeshAlaI02");
+		Ogre::Entity* entAlaI02 = mSceneMgr->createEntity("MeshAlaCara");
 		Ogre::SceneNode* nodoAlaI02 = mSceneMgr->createSceneNode("NodoAlaI02");
-		mSceneMgr->getRootSceneNode()->addChild(nodoAlaI02);
-		nodoAlaI02->roll(Ogre::Degree( -10 ) );
-		//nodoNave->addChild(nodoAlaI02);
+		nodoNave->addChild(nodoAlaI02);
+		nodoAlaI02->yaw(Ogre::Degree( 180 ) );
+		nodoAlaI02->translate(0.0,0.0,6);
+		nodoAlaI02->roll(Ogre::Degree( ang ) );
 		nodoAlaI02->attachObject(entAlaI02);
+		//borde
+		Ogre::Entity* entAlaB03 = mSceneMgr->createEntity("MeshAlaBorde");
+		Ogre::SceneNode* nodoAlaB03 = mSceneMgr->createSceneNode("NodoAlaB03");
+		nodoAlaI02->addChild(nodoAlaB03);
+		nodoAlaB03->attachObject(entAlaB03);
 
-		//Ogre::ManualObject* manualCaraAlaI02a = mSceneMgr->createManualObject("manualCaraAlaI02a");
-		//crearAlasIzq(manualCaraAlaI02a, -2, -7, 0.5);
-		//manualCaraAlaI02a->convertToMesh("MeshAlaI02a");
-		//Ogre::Entity* entAlaI02a = mSceneMgr->createEntity("MeshAlaI02a");
-		//Ogre::SceneNode* nodoAlaI02a = mSceneMgr->createSceneNode("NodoAlaI02a");
-		//nodoAlaI02->addChild(nodoAlaI02a);
-		//nodoAlaI02a->attachObject(entAlaI02a);
-
-		Ogre::ManualObject* manualCaraAlaI01 = mSceneMgr->createManualObject("manualCaraAlaI01");
-		crearAlasIzq(manualCaraAlaI01,-2, -7, 0.5);
-		manualCaraAlaI01->convertToMesh("MeshAlaI01");
-		Ogre::Entity* entAlaI01 = mSceneMgr->createEntity("MeshAlaI01");
+		Ogre::Entity* entAlaI01 = mSceneMgr->createEntity("MeshAlaCara");
 		Ogre::SceneNode* nodoAlaI01 = mSceneMgr->createSceneNode("NodoAlaI01");
-		mSceneMgr->getRootSceneNode()->addChild(nodoAlaI01);
-		nodoAlaI01->roll(Ogre::Degree( 10 ) );
+		nodoNave->addChild(nodoAlaI01);
+		nodoAlaI01->yaw(Ogre::Degree( 180 ) );
+		nodoAlaI01->translate(0.0,-0.5,6);
+		nodoAlaI01->roll(Ogre::Degree( -ang ) );
 		nodoAlaI01->attachObject(entAlaI01);
-
-		//Ogre::ManualObject* manualCaraAlaI01 = mSceneMgr->createManualObject("manualCaraAlaI01");
-		//crearAlasIzq(manualCaraAlaI01, -2, -7, 0.0);
-		//manualCaraAlaI01->convertToMesh("MeshAlaI01");
-		//Ogre::Entity* entAlaI01 = mSceneMgr->createEntity("MeshAlaI01");
-		//Ogre::SceneNode* nodoAlaI01 = mSceneMgr->createSceneNode("NodoAlaI01");
-		//mSceneMgr->getRootSceneNode()->addChild(nodoAlaI01);
-		//nodoNave->addChild(nodoAlaI01);
-		//nodoAlaI01->attachObject(entAlaI01);
-
-
+		//borde
+		Ogre::Entity* entAlaB04 = mSceneMgr->createEntity("MeshAlaBorde");
+		Ogre::SceneNode* nodoAlaB04 = mSceneMgr->createSceneNode("NodoAlaB04");
+		nodoAlaI01->addChild(nodoAlaB04);
+		nodoAlaB04->attachObject(entAlaB04);
 
 		//CARAS DERECHAS ALAS
-
-		Ogre::ManualObject* manualCaraAlaD02 = mSceneMgr->createManualObject("manualCaraAlaD02");
-		crearAlasDer(manualCaraAlaD02, 2, 7, 1.0);
-		manualCaraAlaD02->convertToMesh("MeshAlaD02");
-		Ogre::Entity* entAlaD02 = mSceneMgr->createEntity("MeshAlaD02");
-		Ogre::SceneNode* nodoAlaD02 = mSceneMgr->createSceneNode("NodoAlaD02");
-		mSceneMgr->getRootSceneNode()->addChild(nodoAlaD02);
-		nodoAlaD02->roll(Ogre::Degree( 10 ) );
-		//nodoNave->addChild(nodoAlaD02);
-		nodoAlaD02->attachObject(entAlaD02);
-
-		//Ogre::ManualObject* manualCaraAlaD02a = mSceneMgr->createManualObject("manualCaraAlaD02a");
-		//crearAlasDer(manualCaraAlaD02a, 2, 7, 0.5);
-		//manualCaraAlaD02a->convertToMesh("MeshAlaD02a");
-		//Ogre::Entity* entAlaD02a = mSceneMgr->createEntity("MeshAlaD02a");
-		//Ogre::SceneNode* nodoAlaD02a = mSceneMgr->createSceneNode("NodoAlaD02a");
-		//nodoAlaD02->addChild(nodoAlaD02a);
-		//nodoAlaD02a->attachObject(entAlaD02a);
-
-		//Ogre::ManualObject* manualCaraAlaD01 = mSceneMgr->createManualObject("manualCaraAlaD01");
-		//crearAlasDer(manualCaraAlaD01, 2, 7, 0.0);
-		//manualCaraAlaD01->convertToMesh("MeshAlaD01");
-		//Ogre::Entity* entAlaD01 = mSceneMgr->createEntity("MeshAlaD01");
-		//Ogre::SceneNode* nodoAlaD01 = mSceneMgr->createSceneNode("NodoAlaD01");
-		//mSceneMgr->getRootSceneNode()->addChild(nodoAlaD01);
-		//nodoNave->addChild(nodoAlaD01);
-		//nodoAlaD01->attachObject(entAlaD01);
-
-		Ogre::ManualObject* manualCaraAlaD01 = mSceneMgr->createManualObject("manualCaraAlaD01");
-		crearAlasDer(manualCaraAlaD01,2, 7, 0.5);
-		manualCaraAlaD01->convertToMesh("MeshAlaD01");
-		Ogre::Entity* entAlaD01 = mSceneMgr->createEntity("MeshAlaD01");
+		Ogre::Entity* entAlaD01 = mSceneMgr->createEntity("MeshAlaCara");
 		Ogre::SceneNode* nodoAlaD01 = mSceneMgr->createSceneNode("NodoAlaD01");
-		mSceneMgr->getRootSceneNode()->addChild(nodoAlaD01);
-		nodoAlaD01->roll(Ogre::Degree( -10 ) );
+		nodoNave->addChild(nodoAlaD01);
+		nodoAlaD01->roll(Ogre::Degree( ang ) );
 		nodoAlaD01->attachObject(entAlaD01);
+		//borde
+		Ogre::Entity* entAlaIB01 = mSceneMgr->createEntity("MeshAlaBorde");
+		Ogre::SceneNode* nodoAlaIB01 = mSceneMgr->createSceneNode("NodoAlaIB01");
+		nodoAlaD01->addChild(nodoAlaIB01);
+		nodoAlaIB01->attachObject(entAlaIB01);
+
+		Ogre::Entity* entAlaD02 = mSceneMgr->createEntity("MeshAlaCara");
+		Ogre::SceneNode* nodoAlaD02 = mSceneMgr->createSceneNode("NodoAlaD02");
+		nodoNave->addChild(nodoAlaD02);
+		nodoAlaD02->roll(Ogre::Degree( -ang ) );
+		nodoAlaD02->translate(0.0,-0.5,0.0);
+		nodoAlaD02->attachObject(entAlaD02);
+		//borde
+		Ogre::Entity* entAlaIB02 = mSceneMgr->createEntity("MeshAlaBorde");
+		Ogre::SceneNode* nodoAlaIB02 = mSceneMgr->createSceneNode("NodoAlaIB02");
+		nodoAlaD02->addChild(nodoAlaIB02);
+		nodoAlaIB02->attachObject(entAlaIB02);
+
 
 		/*
 			**********  FIN NAVE  **********
