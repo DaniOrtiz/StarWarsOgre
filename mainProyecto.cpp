@@ -30,15 +30,15 @@ private:
 
 public:
 	// Constructor que le asignamos el nodo que creamos
-	FrameListenerClase(Ogre::Camera* cam, RenderWindow* win) {
-	/*FrameListenerClase(Ogre::SceneNode* nodoNave01, 
+	//FrameListenerClase(Ogre::Camera* cam, RenderWindow* win) {
+	FrameListenerClase(Ogre::SceneNode* nodoNave01, 
  					   Ogre::SceneNode* nodoAlaI01, 
  					   Ogre::SceneNode* nodoAlaI02, 
  					   Ogre::SceneNode* nodoAlaD01, 
  					   Ogre::SceneNode* nodoAlaD02, 
  					   Ogre::Camera* cam, 
  					   RenderWindow* win) {
-					   */
+					   
 
 		// Configuracion captura teclado y mouse
 		// ESTO ES ASI PORQUE SI, NO CAMBIA
@@ -59,10 +59,10 @@ public:
 		//_nodoNave = nodoNave01;
 		_cam = cam;
 
-		//_nodoAlaI01 = nodoAlaI01;
- 		//_nodoAlaI02 = nodoAlaI02;
- 		//_nodoAlaD01 = nodoAlaD01;
- 		//_nodoAlaD02 = nodoAlaD02;
+		_nodoAlaI01 = nodoAlaI01;
+ 		_nodoAlaI02 = nodoAlaI02;
+ 		_nodoAlaD01 = nodoAlaD01;
+ 		_nodoAlaD02 = nodoAlaD02;
 	}
 
 	~FrameListenerClase() {
@@ -150,11 +150,32 @@ public:
 
 	}
 	
-	void createFrameListener(){
-		Ogre::FrameListener* FrameListener01 = new FrameListenerClase(mCamera,mWindow);
-		mRoot->addFrameListener(FrameListener01);
-
-	}
+	Ogre::SceneNode* nodoNave;
+	Ogre::SceneNode* nodoAlaI01; 
+ 	Ogre::SceneNode* nodoAlaI02; 
+ 	Ogre::SceneNode* nodoAlaD01; 
+ 	Ogre::SceneNode* nodoAlaD02; 
+ 	Ogre::FrameListener* FrameListener01; // Objeto de FrameListener
+ 
+ 	//Ogre::SceneNode* nodeCamara;
+ 
+ 	// Constructor
+ 	Example1() {
+ 		FrameListener01 = NULL;
+ 	}
+ 
+ 	// Para destruir la variable FrameListener cuando acabe el programa
+ 	~Example1() {
+ 		if (FrameListener01) {
+ 			delete FrameListener01;
+ 		}
+ 	}
+ 
+ 	// Metodo
+ 	void createFrameListener() {
+ 		FrameListener01 = new FrameListenerClase(nodoNave,nodoAlaI01,nodoAlaI02,nodoAlaD01,nodoAlaD02,mCamera, mWindow); 
+ 		mRoot->addFrameListener(FrameListener01);
+ 	}
 	void createScene()
 	{
 
