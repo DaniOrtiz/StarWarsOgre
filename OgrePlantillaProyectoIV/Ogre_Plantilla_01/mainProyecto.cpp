@@ -1,18 +1,151 @@
 #include "Ogre\ExampleApplication.h"
 
+float r = 1.0;
+float xnave = 0.0, ynave = 0.0, znave = 0.0;
+float ang = 0.0;
+
+class FrameListenerClase : public Ogre::FrameListener { // Hereda de la clase FrameListener de Ogre, escucha algo
+
+private:
+	Ogre::Camera* _cam;
+	Ogre::SceneNode* _nodoNave; // Creamos nodo
+
+	OIS::InputManager* _man;
+	OIS::Keyboard* _key; // Teclado
+	OIS::Mouse* _mouse; // Mouse
+
+	Ogre::SceneNode *cameraNode;
+	Ogre::SceneNode *cameraYawNode;
+	Ogre::SceneNode *cameraPitchNode;
+	Ogre::SceneNode *cameraRollNode;
+
+public:
+	// Constructor que le asignamos el nodo que creamos
+	FrameListenerClase(Ogre::SceneNode* nodoNave01, 
+					   Ogre::Camera* cam, 
+					   RenderWindow* win) {
+		
+/*
+		// Create the camera's top node (which will only handle position).
+		this->cameraNode = this->sceneManager->getRootSceneNode()->createChildSceneNode();
+		this->cameraNode->setPosition(0, 0, 500);
+
+		// Create the camera's yaw node as a child of camera's top node.
+		this->cameraYawNode = this->cameraNode->createChildSceneNode();
+
+		// Create the camera's pitch node as a child of camera's yaw node.
+		this->cameraPitchNode = this->cameraYawNode->createChildSceneNode();
+
+		// Create the camera's roll node as a child of camera's pitch node
+		// and attach the camera to it.
+		this->cameraRollNode = this->cameraPitchNode->createChildSceneNode();
+		this->cameraRollNode->attachObject(this->camera);
+*/
+
+		// Configuracion captura teclado y mouse
+		// ESTO ES ASI PORQUE SI, NO CAMBIA
+		size_t windowHnd = 0;
+		std::stringstream windowHndStr;
+		win->getCustomAttribute("WINDOW", &windowHnd);
+		windowHndStr << windowHnd;
+
+		OIS::ParamList pl;
+		pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
+
+		// Eventos
+
+		_man = OIS::InputManager::createInputSystem(pl);
+		_key = static_cast< OIS::Keyboard*>(_man->createInputObject(OIS::OISKeyboard, false));
+		_mouse = static_cast< OIS::Mouse*>(_man->createInputObject(OIS::OISMouse, false));
+
+		_nodoNave = nodoNave01;
+		_cam = cam;
+	}
+
+	~FrameListenerClase() {
+		_man ->destroyInputObject(_key);
+		_man->destroyInputObject(_mouse);
+		OIS::InputManager::destroyInputSystem(_man);
+	}
+
+	bool frameStarted(const Ogre::FrameEvent &evt) {
+			
+		_key->capture();
+		_mouse->capture();
+
+		float movSpeed = 10.0f;
+		Ogre::Vector3 tcam(0,0,0);
+
+		if (_key->isKeyDown(OIS::KC_ESCAPE))
+			return false;
+
+		// Teclas para la mover la camara
+
+		// Si presionamos la tecla w
+		if(_key->isKeyDown(OIS::KC_W))
+			tcam += Ogre::Vector3(0,0,-10);
+
+		// Si presionamos la tecla a
+		if(_key->isKeyDown(OIS::KC_A))
+			tcam += Ogre::Vector3(-10,0,0);
+
+		if(_key->isKeyDown(OIS::KC_E))
+			ang = 10.0;
+
+		if(_key->isKeyDown(OIS::KC_R))
+			ang = 0.0;
+
+		// Si presionamos la tecla d
+		if(_key->isKeyDown(OIS::KC_D))
+			tcam += Ogre::Vector3(10,0,0);
+		
+		// Camara Control
+		float rotX = _mouse->getMouseState().X.rel * evt.timeSinceLastFrame * -1;
+		float rotY = _mouse->getMouseState().Y.rel * evt.timeSinceLastFrame * -1;
+		_cam->yaw(Ogre::Radian(rotX));
+		_cam->pitch(Ogre::Radian(rotY));
+		_cam->moveRelative(tcam*movSpeed*evt.timeSinceLastFrame);
+
+		//_nodoNave->translate(tcam*movSpeed*evt.timeSinceLastFrame);
+		//_nodoNave->yaw(Ogre::Radian(rotX));
+		//_nodoNave->pitch(Ogre::Radian(rotY));
+		return true;
+	}
+};
 
 class Example1 : public ExampleApplication
 {
 
 public:
+	Ogre::SceneNode* nodoNave;
+	Ogre::FrameListener* FrameListener01; // Objeto de FrameListener
+
+	//Ogre::SceneNode* nodeCamara;
+
+	// Constructor
+	Example1() {
+		FrameListener01 = NULL;
+	}
+
+	// Para destruir la variable FrameListener cuando acabe el programa
+	~Example1() {
+		if (FrameListener01) {
+			delete FrameListener01;
+		}
+	}
+
+	// Metodo
+	void createFrameListener() {
+		FrameListener01 = new FrameListenerClase(nodoNave,mCamera, mWindow); 
+		mRoot->addFrameListener(FrameListener01);
+	}
 
 	void createCamera() {
 
 		mCamera = mSceneMgr->createCamera("MyCamera1");
-		mCamera->setPosition(0,10,50);
+		mCamera->setPosition(0.0,0.0,30);
 		mCamera->lookAt(0,0,-50);
 		mCamera->setNearClipDistance(5);
-
 	}
 
 	void createScene()
@@ -97,10 +230,11 @@ public:
 		manual->end();
 		manual->convertToMesh("MeshNave");
 		Ogre::Entity* entNave = mSceneMgr->createEntity("MeshNave");
-		Ogre::SceneNode* nodoNave = mSceneMgr->createSceneNode("NodoNave");
+		nodoNave = mSceneMgr->createSceneNode("NodoNave");
 		mSceneMgr->getRootSceneNode()->addChild(nodoNave);
 		nodoNave->attachObject(entNave);
 		nodoNave->translate(0.0,-5,0.0);
+		//entNave->setMaterialName("Nave/Gris");
 
 		//cara de atras
 		ManualObject* manualCara = mSceneMgr->createManualObject("manualCara");
@@ -196,8 +330,6 @@ public:
 			}
 		manualAlaBorde->end();
 		manualAlaBorde->convertToMesh("MeshAlaBorde");
-
-		float ang = 10;
 
 		//CARAS IZQUIERDAS ALAS
 		Ogre::Entity* entAlaI02 = mSceneMgr->createEntity("MeshAlaCara");
