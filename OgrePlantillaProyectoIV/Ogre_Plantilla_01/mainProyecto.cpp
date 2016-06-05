@@ -78,7 +78,7 @@ public:
 
 		/*
 			**********  NAVE  **********
-		*/
+		
 		const float x1 = 2.0;
 		const float y1 = 1.7;
 		const float z1 = 6.0;
@@ -166,14 +166,153 @@ public:
 		Ogre::SceneNode* nodoNaveBase02 = mSceneMgr->createSceneNode("NodoNaveBase02");
 		nodoNave->addChild(nodoNaveBase02);
 		nodoNaveBase02->attachObject(entNaveBase02);
-
+		*/
 		/*
 			**********  FIN NAVE  **********
 		*/
 
+		/*
+			**********  ALAS  **********
+		*/
 
+		//const float x1 = 2.0;
+		//const float y1 = 1.7;
+		const float z1 = 6.0;
+		// Ala superior derecha
+		ManualObject* alaSupDer = mSceneMgr->createManualObject("alaSupDer");
+		alaSupDer->begin("AlaWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
+
+			// Cara de arriba
+			alaSupDer->position( 2.5, 2.0, z1-7);
+			alaSupDer->position( 2.5, 2.0, z1-2);
+			alaSupDer->position( 10.0, 2.0, z1-7);
+			alaSupDer->position( 10.0, 2.0, z1-2);
+			// Cara de abajo
+			alaSupDer->position( 2.5, 1.5, z1-7);
+			alaSupDer->position( 2.5, 1.5, z1-2);
+			alaSupDer->position( 10.0, 1.5, z1-7);
+			alaSupDer->position( 10.0, 1.5, z1-2);
+			// Frontales
+			/*
+			alaSupDer->position( 2.5, 1.5, z1-7);
+			alaSupDer->position( 2.5, 1.5, z1-2);
+			alaSupDer->position( 2.5, 2.0, z1-7);
+			alaSupDer->position( 2.5, 2.0, z1-2);
+			
+			alaSupDer->position( 2.5, 2.0, z1-7);
+			alaSupDer->position( 2.5, 1.5, z1-7);
+			alaSupDer->position( 10.0, 2.0, z1-7);
+			alaSupDer->position( 10.0, 1.5, z1-7);
+
+			alaSupDer->position( 2.5, 2.0, z1-2);
+			alaSupDer->position( 2.5, 1.5, z1-2);
+			alaSupDer->position( 10.0, 2.0, z1-2);
+			alaSupDer->position( 10.0, 1.5, z1-2);
+
+			alaSupDer->position( 10.0, 2.0, z1-7);
+			alaSupDer->position( 10.0, 2.0, z1-2);
+			alaSupDer->position( 10.0, 1.5, z1-7);
+			alaSupDer->position( 10.0, 1.5, z1-2);
+			*/
+
+			for(int i = 0; i < 15; i++){
+				alaSupDer->index(i);
+			}
+
+		alaSupDer->end();
+		alaSupDer->convertToMesh("MeshAla");
+		Ogre::Entity* entAla = mSceneMgr->createEntity("MeshAla");
+		Ogre::SceneNode* nodoAla = mSceneMgr->createSceneNode("NodoAla");
+		mSceneMgr->getRootSceneNode()->addChild(nodoAla);
+		nodoAla->attachObject(entAla);
+
+		// Ala inferior derecha
+		ManualObject* alaInfDer = mSceneMgr->createManualObject("alaInfDer");
+		alaInfDer->begin("AlaWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
+
+			// Cara de arriba
+			alaInfDer->position( 2.5, 1.4, z1-7);
+			alaInfDer->position( 2.5, 1.4, z1-2);
+			alaInfDer->position( 10.0, 1.4, z1-7);
+			alaInfDer->position( 10.0, 1.4, z1-2);
+			// Cara de abajo
+			alaInfDer->position( 2.5, 0.9, z1-7);
+			alaInfDer->position( 2.5, 0.9, z1-2);
+			alaInfDer->position( 10.0, 0.9, z1-7);
+			alaInfDer->position( 10.0, 0.9, z1-2);
+			// Frontales
+			
+
+			for(int i = 0; i < 15; i++){
+				alaInfDer->index(i);
+			}
+
+		alaInfDer->end();
+		alaInfDer->convertToMesh("MeshAla3");
+		Ogre::Entity* entAla3 = mSceneMgr->createEntity("MeshAla3");
+		Ogre::SceneNode* nodoAla3 = mSceneMgr->createSceneNode("NodoAla3");
+		mSceneMgr->getRootSceneNode()->addChild(nodoAla3);
+		nodoAla3->attachObject(entAla3);
 		
-		
+		// Ala superior izquierda
+		ManualObject* alaSupIzq = mSceneMgr->createManualObject("alaSupIzq");
+		alaSupIzq->begin("AlaWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
+
+			// Cara de arriba
+			alaSupIzq->position( -2.5, 2.0, z1-2);
+			alaSupIzq->position( -2.5, 2.0, z1-7);
+			alaSupIzq->position( -10.0, 2.0, z1-2);
+			alaSupIzq->position( -10.0, 2.0, z1-7);
+			/*
+			// Cara de abajo
+			alaSupIzq->position( -2.5, 1.5, z1-2);
+			alaSupIzq->position( -2.5, 1.5, z1-7);
+			alaSupIzq->position( -10.0, 1.5, z1-2);
+			alaSupIzq->position( -10.0, 1.5, z1-7);
+			*/
+			// Frontales
+			
+			for(int i = 0; i < 15; i++){
+				alaSupIzq->index(i);
+			}
+
+		alaSupIzq->end();
+		alaSupIzq->convertToMesh("MeshAla2");
+		Ogre::Entity* entAla2 = mSceneMgr->createEntity("MeshAla2");
+		Ogre::SceneNode* nodoAla2 = mSceneMgr->createSceneNode("NodoAla2");
+		mSceneMgr->getRootSceneNode()->addChild(nodoAla2);
+		nodoAla2->attachObject(entAla2);
+
+		/*
+		// Ala inferior izquierda
+		ManualObject* alaInfIzq = mSceneMgr->createManualObject("alaInfIzq");
+		alaInfIzq->begin("AlaWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
+			
+			// Cara de arriba
+			alaInfIzq->position( 2.5, 1.4, z1-7);
+			alaInfIzq->position( 2.5, 1.4, z1-2);
+			alaInfIzq->position( 10.0, 1.4, z1-7);
+			alaInfIzq->position( 10.0, 1.4, z1-2);
+			// Cara de abajo
+			alaInfIzq->position( 2.5, 0.9, z1-7);
+			alaInfIzq->position( 2.5, 0.9, z1-2);
+			alaInfIzq->position( 10.0, 0.9, z1-7);
+			alaInfIzq->position( 10.0, 0.9, z1-2);
+			// Frontales
+			
+
+			for(int i = 0; i < 15; i++){
+				alaInfIzq->index(i);
+			}
+
+		alaInfIzq->end();
+		alaInfIzq->convertToMesh("MeshAla4");
+		Ogre::Entity* entAla4 = mSceneMgr->createEntity("MeshAla4");
+		Ogre::SceneNode* nodoAla4 = mSceneMgr->createSceneNode("NodoAla4");
+		mSceneMgr->getRootSceneNode()->addChild(nodoAla4);
+		nodoAla4->attachObject(entAla4);
+		*/
+
 		// Creando Torretas
 		// TORRETA 1 - Primera de la izquierda
 
