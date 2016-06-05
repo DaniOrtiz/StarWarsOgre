@@ -1,10 +1,109 @@
 #include "Ogre\ExampleApplication.h"
 
+float r = 1.0;
+
+class FrameListenerClase : public Ogre::FrameListener { // Hereda de la clase FrameListener de Ogre, escucha algo
+
+private:
+	Ogre::Camera* _cam;
+
+	OIS::InputManager* _man;
+	OIS::Keyboard* _key; // Teclado
+	OIS::Mouse* _mouse; // Mouse
+
+public:
+	// Constructor que le asignamos el nodo que creamos
+	FrameListenerClase(Ogre::Camera* cam, RenderWindow* win) {
+		
+		// Configuracion captura teclado y mouse
+		// ESTO ES ASI PORQUE SI, NO CAMBIA
+		size_t windowHnd = 0;
+		std::stringstream windowHndStr;
+		win->getCustomAttribute("WINDOW", &windowHnd);
+		windowHndStr << windowHnd;
+
+		OIS::ParamList pl;
+		pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
+
+		// Eventos
+
+		_man = OIS::InputManager::createInputSystem(pl);
+		_key = static_cast< OIS::Keyboard*>(_man->createInputObject(OIS::OISKeyboard, false));
+		_mouse = static_cast< OIS::Mouse*>(_man->createInputObject(OIS::OISMouse, false));
+
+		_cam = cam;
+	}
+
+	~FrameListenerClase() {
+		_man ->destroyInputObject(_key);
+		_man->destroyInputObject(_mouse);
+		OIS::InputManager::destroyInputSystem(_man);
+	}
+
+	// Funcion que viene con ogre, se llama constantemente, para saber que esta pasando NO CONFUNDIR CON RENDER
+	// ESTO HACE QUE EL OBJETO SE "ANIME" o se mueva
+	bool frameStarted(const Ogre::FrameEvent &evt) {
+			
+		_key->capture();
+		_mouse->capture();
+
+		float movSpeed = 10.0f;
+		Ogre::Vector3 tmov(0,0,0);
+		Ogre::Vector3 tcam(0,0,0);
+
+		if (_key->isKeyDown(OIS::KC_ESCAPE))
+			return false;
+
+		// Teclas para la mover la camara
+
+		// Si presionamos la tecla w
+		if(_key->isKeyDown(OIS::KC_W))
+			tcam += Ogre::Vector3(0,0,-10);
+
+		// Si presionamos la tecla a
+		if(_key->isKeyDown(OIS::KC_A))
+			tcam += Ogre::Vector3(-10,0,0);
+
+		// Si presionamos la tecla d
+		if(_key->isKeyDown(OIS::KC_D))
+			tcam += Ogre::Vector3(10,0,0);
+		
+		// Camara Control
+		float rotX = _mouse->getMouseState().X.rel * evt.timeSinceLastFrame * -1;
+		float rotY = _mouse->getMouseState().Y.rel * evt.timeSinceLastFrame * -1;
+		_cam->yaw(Ogre::Radian(rotX));
+		_cam->pitch(Ogre::Radian(rotY));
+		_cam->moveRelative(tcam*movSpeed*evt.timeSinceLastFrame);
+
+		return true;
+	}
+};
 
 class Example1 : public ExampleApplication
 {
 
 public:
+
+	Ogre::FrameListener* FrameListener01; // Objeto de FrameListener
+
+	// Constructor
+	Example1() {
+		FrameListener01 = NULL;
+	}
+
+	// Para destruir la variable FrameListener cuando acabe el programa
+	~Example1() {
+		if (FrameListener01) {
+			delete FrameListener01;
+		}
+	}
+
+	// Metodo
+	void createFrameListener() {
+		FrameListener01 = new FrameListenerClase(mCamera, mWindow); // Eventualmente tenemos que tener un arreglo para poder declarar cada objeto
+																			  // la variable mCamera viene con la plantilla no la creamos nosotros
+		mRoot->addFrameListener(FrameListener01);
+	}
 
 	void createCamera() {
 
@@ -172,8 +271,6 @@ public:
 		*/
 
 
-		
-		
 		// Creando Torretas
 		// TORRETA 1 - Primera de la izquierda
 
