@@ -525,7 +525,6 @@ public:
 			**********  FIN NAVE  **********
 		*/
 
-
 		// Creando Torretas
 
 		// TORRETA 1 - Primera de la izquierda
@@ -551,9 +550,9 @@ public:
 		Ogre::Entity* entCanon01 = mSceneMgr->createEntity("usb_cilindro.mesh");
 		Ogre::SceneNode* nodoCanon01 = mSceneMgr->createSceneNode("NodoCanon01");
 		nodoTorreta01->addChild(nodoCanon01);
-		nodoCanon01->setPosition(0.0,7.0,3.7);
+		nodoCanon01->setPosition(0.8,7.0,3.7);
 		nodoCanon01->setScale(0.1,0.6,0.1);
-		nodoCanon01->yaw(Degree(5));		// variar los angulos para que apunten al centro
+		nodoCanon01->yaw(Degree(15));		
 		nodoCanon01->pitch(Degree(90));
 		nodoCanon01->attachObject(entCanon01);
 		entCanon01->setMaterial(materialTorretas3);
@@ -592,17 +591,23 @@ public:
 		Ogre::NodeAnimationTrack* trackLaser01 = animationLaserT01->createNodeTrack(0,nodoLaser01);
 		Ogre::TransformKeyFrame* key;
 		key = trackLaser01 -> createNodeKeyFrame(0.0);
-		key -> setTranslate(Vector3(0.0,0.0,0.0));
-		key -> setScale(Vector3(0.0,0.0,0.0));
-		//key -> setRotation(Quaternion(1,1,0,0));		
-		key = trackLaser01 -> createNodeKeyFrame(0.5);
-		key -> setTranslate(Vector3(0.0,0.0,0.0));
-		key -> setScale(Vector3(0.0,0.0,0.0));
-		//key -> setRotation(Quaternion(1,1,0,0));
-		key = trackLaser01 -> createNodeKeyFrame(1.0);
-		key -> setTranslate(Vector3(0.0,0.0,0.0));
-		key -> setScale(Vector3(0.0,0.0,0.0));
-		//key -> setRotation(Quaternion(1,1,0,0));
+		key -> setTranslate(Vector3(0,10,0));
+		key -> setScale(Vector3(1.0,1.0,1.0));
+		key = trackLaser01 -> createNodeKeyFrame(2.0);
+		key -> setTranslate(Vector3(0,105,0));
+		key -> setScale(Vector3(2.0,2.0,2.0));
+		key = trackLaser01 -> createNodeKeyFrame(2.5);
+		key -> setTranslate(Vector3(0,205,0));
+		key -> setScale(Vector3(2.5,2.5,2.5));
+		key = trackLaser01 -> createNodeKeyFrame(3.0);
+		key -> setTranslate(Vector3(0,300,0));
+		key -> setScale(Vector3(4.5,2.5,4.5));
+		key = trackLaser01 -> createNodeKeyFrame(4.0);
+		key -> setTranslate(Vector3(0,400,0));
+		key -> setScale(Vector3(6.5,2.5,6.5));
+		key = trackLaser01 -> createNodeKeyFrame(5.0);
+		key -> setTranslate(Vector3(0,500,0));
+		key -> setScale(Vector3(0,0,0));
 		
 		animationLaser01 = mSceneMgr -> createAnimationState("animationLaserT01");
 		animationLaser01 -> setEnabled(true);
@@ -633,12 +638,13 @@ public:
 		Ogre::Entity* entCanon02 = mSceneMgr->createEntity("usb_cilindro.mesh");
 		Ogre::SceneNode* nodoCanon02 = mSceneMgr->createSceneNode("NodoCanon02");
 		nodoTorreta02->addChild(nodoCanon02);
-		nodoCanon02->setPosition(0.0,7.0,3.7);
+		nodoCanon02->setPosition(0.8,7.0,3.7);
 		nodoCanon02->setScale(0.1,0.6,0.1);
-		nodoCanon02->yaw(Degree(5));		// variar los angulos para que apunten al centro
+		nodoCanon02->yaw(Degree(15));		
 		nodoCanon02->pitch(Degree(90));
 		nodoCanon02->attachObject(entCanon02);
 		entCanon02->setMaterial(materialTorretas3);
+
 
 		// Punta del Canon 
 		Ogre::Entity* entPuntaC02 = mSceneMgr->createEntity("usb_cilindro.mesh");
@@ -669,22 +675,28 @@ public:
 		// Animacion del Laser
 		
 		float duration2 = 4.0f;
-		Ogre::Animation* animationLaserT02 = mSceneMgr -> createAnimation("animationLaserT02",duration);
+		Ogre::Animation* animationLaserT02 = mSceneMgr -> createAnimation("animationLaserT02",duration2);
 		animationLaserT02 -> setInterpolationMode(Animation::IM_SPLINE);
 		Ogre::NodeAnimationTrack* trackLaser02 = animationLaserT02->createNodeTrack(0,nodoLaser02);
 		Ogre::TransformKeyFrame* key2;
 		key2 = trackLaser02 -> createNodeKeyFrame(0.0);
-		key2 -> setTranslate(Vector3(0.0,0.0,0.0));
-		key2 -> setScale(Vector3(0.0,0.0,0.0));
-		//key -> setRotation(Quaternion(1,1,0,0));		
-		key2 = trackLaser02 -> createNodeKeyFrame(0.5);
-		key2 -> setTranslate(Vector3(0.0,0.0,0.0));
-		key2 -> setScale(Vector3(0.0,0.0,0.0));
-		//key2 -> setRotation(Quaternion(1,1,0,0));
-		key2 = trackLaser02 -> createNodeKeyFrame(1.0);
-		key2 -> setTranslate(Vector3(0.0,0.0,0.0));
-		key2 -> setScale(Vector3(0.0,0.0,0.0));
-		//key2 -> setRotation(Quaternion(1,1,0,0));
+		key2 -> setTranslate(Vector3(0,10,0));
+		key2 -> setScale(Vector3(1.0,1.0,1.0));
+		key2 = trackLaser02 -> createNodeKeyFrame(2.0);
+		key2 -> setTranslate(Vector3(0,105,0));
+		key2 -> setScale(Vector3(2.0,2.0,2.0));
+		key2 = trackLaser02 -> createNodeKeyFrame(2.5);
+		key2 -> setTranslate(Vector3(0,205,0));
+		key2 -> setScale(Vector3(2.5,2.5,2.5));
+		key2 = trackLaser02 -> createNodeKeyFrame(3.0);
+		key2 -> setTranslate(Vector3(0,300,0));
+		key2 -> setScale(Vector3(4.5,2.5,4.5));
+		key2 = trackLaser02 -> createNodeKeyFrame(4.0);
+		key2 -> setTranslate(Vector3(0,400,0));
+		key2 -> setScale(Vector3(6.5,2.5,6.5));
+		key2 = trackLaser02 -> createNodeKeyFrame(5.0);
+		key2 -> setTranslate(Vector3(0,500,0));
+		key2 -> setScale(Vector3(0,0,0));
 		
 		animationLaser02 = mSceneMgr -> createAnimationState("animationLaserT02");
 		animationLaser02 -> setEnabled(true);
@@ -713,9 +725,9 @@ public:
 		Ogre::Entity* entCanon03 = mSceneMgr->createEntity("usb_cilindro.mesh");
 		Ogre::SceneNode* nodoCanon03 = mSceneMgr->createSceneNode("NodoCanon03");
 		nodoTorreta03->addChild(nodoCanon03);
-		nodoCanon03->setPosition(0.0,7.0,3.7);
+		nodoCanon03->setPosition(-0.8,7.0,3.7);
 		nodoCanon03->setScale(0.1,0.6,0.1);
-		nodoCanon03->yaw(Degree(-5));		// variar los angulos para que apunten al centro
+		nodoCanon03->yaw(Degree(-15));		
 		nodoCanon03->pitch(Degree(90));
 		nodoCanon03->attachObject(entCanon03);
 		entCanon03->setMaterial(materialTorretas3);
@@ -748,28 +760,33 @@ public:
 
 		// Animacion del Laser
 		
-		//float duration3 = 4.0f;
-		Ogre::Animation* animationLaserT03 = mSceneMgr -> createAnimation("animationLaserT03",duration);
+		float duration3 = 4.0f;
+		Ogre::Animation* animationLaserT03 = mSceneMgr -> createAnimation("animationLaserT03",duration3);
 		animationLaserT03 -> setInterpolationMode(Animation::IM_SPLINE);
 		Ogre::NodeAnimationTrack* trackLaser03 = animationLaserT03->createNodeTrack(0,nodoLaser03);
 		Ogre::TransformKeyFrame* key3;
 		key3 = trackLaser03 -> createNodeKeyFrame(0.0);
-		key3 -> setTranslate(Vector3(0.0,0.0,0.0));
-		key3 -> setScale(Vector3(0.0,0.0,0.0));
-		//key3 -> setRotation(Quaternion(1,1,0,0));		
-		key3 = trackLaser03 -> createNodeKeyFrame(0.5);
-		key3 -> setTranslate(Vector3(0.0,0.0,0.0));
-		key3 -> setScale(Vector3(0.0,0.0,0.0));
-		//key3 -> setRotation(Quaternion(1,1,0,0));
-		key3 = trackLaser03 -> createNodeKeyFrame(1.0);
-		key3 -> setTranslate(Vector3(0.0,0.0,0.0));
-		key3 -> setScale(Vector3(0.0,0.0,0.0));
-		//key3 -> setRotation(Quaternion(1,1,0,0));
+		key3 -> setTranslate(Vector3(0,10,0));
+		key3 -> setScale(Vector3(1.0,1.0,1.0));
+		key3 = trackLaser03 -> createNodeKeyFrame(2.0);
+		key3 -> setTranslate(Vector3(0,105,0));
+		key3 -> setScale(Vector3(2.0,2.0,2.0));
+		key3 = trackLaser03 -> createNodeKeyFrame(2.5);
+		key3 -> setTranslate(Vector3(0,205,0));
+		key3 -> setScale(Vector3(2.5,2.5,2.5));
+		key3 = trackLaser03 -> createNodeKeyFrame(3.0);
+		key3 -> setTranslate(Vector3(0,300,0));
+		key3 -> setScale(Vector3(4.5,2.5,4.5));
+		key3 = trackLaser03 -> createNodeKeyFrame(4.0);
+		key3 -> setTranslate(Vector3(0,400,0));
+		key3 -> setScale(Vector3(6.5,2.5,6.5));
+		key3 = trackLaser03 -> createNodeKeyFrame(5.0);
+		key3 -> setTranslate(Vector3(0,500,0));
+		key3 -> setScale(Vector3(0,0,0));
 		
 		animationLaser03 = mSceneMgr -> createAnimationState("animationLaserT03");
 		animationLaser03 -> setEnabled(true);
 		animationLaser03 -> setLoop(true);
-		
 		
 		// TORRETA 4 - Segunda de la derecha
 
@@ -794,9 +811,9 @@ public:
 		Ogre::Entity* entCanon04 = mSceneMgr->createEntity("usb_cilindro.mesh");
 		Ogre::SceneNode* nodoCanon04 = mSceneMgr->createSceneNode("NodoCanon04");
 		nodoTorreta04->addChild(nodoCanon04);
-		nodoCanon04->setPosition(0.0,7.0,3.7);
+		nodoCanon04->setPosition(-0.8,7.0,3.7);
 		nodoCanon04->setScale(0.1,0.6,0.1);
-		nodoCanon04->yaw(Degree(-5));		// variar los angulos para que apunten al centro
+		nodoCanon04->yaw(Degree(-15));		
 		nodoCanon04->pitch(Degree(90));
 		nodoCanon04->attachObject(entCanon04);
 		entCanon04->setMaterial(materialTorretas3);
@@ -830,22 +847,28 @@ public:
 		// Animacion del Laser
 		
 		float duration4 = 4.0f;
-		Ogre::Animation* animationLaserT04 = mSceneMgr -> createAnimation("animationLaserT04",duration);
+		Ogre::Animation* animationLaserT04 = mSceneMgr -> createAnimation("animationLaserT04",duration4);
 		animationLaserT04 -> setInterpolationMode(Animation::IM_SPLINE);
 		Ogre::NodeAnimationTrack* trackLaser04 = animationLaserT04->createNodeTrack(0,nodoLaser04);
 		Ogre::TransformKeyFrame* key4;
 		key4 = trackLaser04 -> createNodeKeyFrame(0.0);
-		key4 -> setTranslate(Vector3(0.0,0.0,0.0));
-		key4 -> setScale(Vector3(0.0,0.0,0.0));
-		//key4 -> setRotation(Quaternion(1,1,0,0));		
-		key4 = trackLaser04 -> createNodeKeyFrame(0.5);
-		key4 -> setTranslate(Vector3(0.0,0.0,0.0));
-		key4 -> setScale(Vector3(0.0,0.0,0.0));
-		//key4 -> setRotation(Quaternion(1,1,0,0));
-		key4 = trackLaser04 -> createNodeKeyFrame(1.0);
-		key4 -> setTranslate(Vector3(0.0,0.0,0.0));
-		key4 -> setScale(Vector3(0.0,0.0,0.0));
-		//key4 -> setRotation(Quaternion(1,1,0,0));
+		key4 -> setTranslate(Vector3(0,10,0));
+		key4 -> setScale(Vector3(1.0,1.0,1.0));
+		key4 = trackLaser04 -> createNodeKeyFrame(2.0);
+		key4 -> setTranslate(Vector3(0,105,0));
+		key4 -> setScale(Vector3(2.0,2.0,2.0));
+		key4 = trackLaser04 -> createNodeKeyFrame(2.5);
+		key4 -> setTranslate(Vector3(0,205,0));
+		key4 -> setScale(Vector3(2.5,2.5,2.5));
+		key4 = trackLaser04 -> createNodeKeyFrame(3.0);
+		key4 -> setTranslate(Vector3(0,300,0));
+		key4 -> setScale(Vector3(4.5,2.5,4.5));
+		key4 = trackLaser04 -> createNodeKeyFrame(4.0);
+		key4 -> setTranslate(Vector3(0,400,0));
+		key4 -> setScale(Vector3(6.5,2.5,6.5));
+		key4 = trackLaser04 -> createNodeKeyFrame(5.0);
+		key4 -> setTranslate(Vector3(0,500,0));
+		key4 -> setScale(Vector3(0,0,0));
 		
 		animationLaser04 = mSceneMgr -> createAnimationState("animationLaserT04");
 		animationLaser04 -> setEnabled(true);
