@@ -200,7 +200,7 @@ public:
 	void createCamera() {
 
 		mCamera = mSceneMgr->createCamera("MyCamera1");
-		mCamera->setPosition(0.0,6,34);
+		mCamera->setPosition(0.0,6,28);
 		mCamera->lookAt(0,6,-50);
 		mCamera->setNearClipDistance(5);
 	}
@@ -296,7 +296,7 @@ public:
 		nodoNave = mSceneMgr->createSceneNode("NodoNave");
 		mSceneMgr->getRootSceneNode()->addChild(nodoNave);
 		nodoNave->attachObject(entNave);
-		nodoNave->translate(0.0,-2,0.0);
+		nodoNave->translate(0.0,-2,-4);
 		//entNave->setMaterialName("DanielaOrtiz_Nave/Gris");
 
 		//cara de atras
