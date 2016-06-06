@@ -1,6 +1,15 @@
 #include "Ogre\ExampleApplication.h"
 
-Ogre::AnimationState* AnimacionAlasAbrir;
+
+Ogre::AnimationState* AnimacionAlasAbrir01;
+Ogre::AnimationState* AnimacionAlasAbrir02;
+Ogre::AnimationState* AnimacionAlasAbrir03;
+Ogre::AnimationState* AnimacionAlasAbrir04;
+
+Ogre::AnimationState* AnimacionAlasCerrar01;
+Ogre::AnimationState* AnimacionAlasCerrar02;
+Ogre::AnimationState* AnimacionAlasCerrar03;
+Ogre::AnimationState* AnimacionAlasCerrar04;
 
 Ogre::AnimationState* animationLaser01;
 Ogre::AnimationState* animationLaser02;
@@ -93,9 +102,10 @@ public:
 			tcam += Ogre::Vector3(-10,0,0);
 
 		if(_key->isKeyDown(OIS::KC_E)){			
-
-			AnimacionAlasAbrir->setEnabled(true);
-			abiertas = true;		
+			AnimacionAlasAbrir01->setEnabled(true);
+			//AnimacionAlasAbrir02->setEnabled(true);
+			//AnimacionAlasAbrir03->setEnabled(true);
+			//AnimacionAlasAbrir04->setEnabled(true);
 			//_nodoAlaI01->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame ) );
 			//_nodoAlaI02->roll(Ogre::Degree(-10 * evt.timeSinceLastFrame) );
 			//_nodoAlaD01->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame ) );
@@ -103,12 +113,15 @@ public:
 			//AnimacionAlasAbrir->addTime(evt.timeSinceLastFrame);
 		}
 
-		if(_key->isKeyDown(OIS::KC_R)){			
+		if(_key->isKeyDown(OIS::KC_R)){		
+			//AnimacionAlasCerrar01->setEnabled(true);
+			//AnimacionAlasCerrar02->setEnabled(true);
+			//AnimacionAlasCerrar03->setEnabled(true);
+			//AnimacionAlasCerrar04->setEnabled(true);	
 			//_nodoAlaI01->roll(Ogre::Degree(-10 * evt.timeSinceLastFrame ) );
 			//_nodoAlaI02->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame) );
 			//_nodoAlaD01->roll(Ogre::Degree(-10 * evt.timeSinceLastFrame ) );
 			//_nodoAlaD02->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame ) );	
-			abiertas = false;
 		}
 
 		// Si presionamos la tecla d
@@ -130,7 +143,11 @@ public:
 		animationLaser03 -> addTime(evt.timeSinceLastFrame);
 		animationLaser04 -> addTime(evt.timeSinceLastFrame);
 
-		AnimacionAlasAbrir -> addTime(evt.timeSinceLastFrame);
+		AnimacionAlasAbrir01 -> addTime(evt.timeSinceLastFrame);
+		//AnimacionAlasAbrir02 -> addTime(evt.timeSinceLastFrame);
+		//AnimacionAlasAbrir03 -> addTime(evt.timeSinceLastFrame);
+		//AnimacionAlasAbrir04 -> addTime(evt.timeSinceLastFrame);
+		
 		return true;
 
 	}
@@ -171,8 +188,8 @@ public:
 	void createCamera() {
 
 		mCamera = mSceneMgr->createCamera("MyCamera1");
-		mCamera->setPosition(0.0,0.0,34);
-		mCamera->lookAt(0,0,-50);
+		mCamera->setPosition(0.0,6,34);
+		mCamera->lookAt(0,6,-50);
 		mCamera->setNearClipDistance(5);
 	}
 
@@ -499,26 +516,56 @@ public:
 
 
 
-		float durationA = 3.0f;
-		Ogre::Animation* animacionAbrirAlas = mSceneMgr->createAnimation("AnimAbrirAlas",durationA);
-		animacionAbrirAlas->setInterpolationMode(Animation::IM_SPLINE);
-		Ogre::NodeAnimationTrack* AniAlaD02 = animacionAbrirAlas->createNodeTrack(0,nodoAlaD02);
+		float durationA = 5.0f;
+		Ogre::Animation* animacionAbrirAlas01 = mSceneMgr->createAnimation("AnimAbrirAlas",durationA);
+		animacionAbrirAlas01->setInterpolationMode(Animation::IM_SPLINE);
+		Ogre::NodeAnimationTrack* AniAlaD02 = animacionAbrirAlas01->createNodeTrack(0,nodoAlaD02);
 		Ogre::TransformKeyFrame* keyA;
-
-		//FRAMES
 		keyA = AniAlaD02->createNodeKeyFrame(0.0);
-		//[cos(a/2), sin(a/2) * nx, sin(a/2)* ny, sin(a/2) * nz]
-   		keyA -> setRotation(Quaternion(Degree(0.0), Vector3::UNIT_Z));
-
+		keyA -> setRotation(Quaternion(Degree(0.0), Vector3::UNIT_Z));
 		keyA = AniAlaD02->createNodeKeyFrame(5.0);
-		//[cos(a/2), sin(a/2) * nx, sin(a/2)* ny, sin(a/2) * nz]
-   		keyA -> setRotation(Quaternion(Degree(10), Vector3::UNIT_Z));
-				
-		AnimacionAlasAbrir = mSceneMgr->createAnimationState("AnimAbrirAlas");
-		AnimacionAlasAbrir->setLoop(false);
+		keyA -> setRotation(Quaternion(Degree(-10), Vector3::UNIT_Z));
+		AnimacionAlasAbrir01 = mSceneMgr->createAnimationState("AnimAbrirAlas");
+		AnimacionAlasAbrir01->setLoop(false);
 
+		/*
 
+float durationA02 = 5.0f;
+		Ogre::Animation* animacionAbrirAlas02 = mSceneMgr->createAnimation("AnimAbrirAlas01",durationA02);
+		animacionAbrirAlas02->setInterpolationMode(Animation::IM_SPLINE);
+		Ogre::NodeAnimationTrack* AniAlaIB01 = animacionAbrirAlas02->createNodeTrack(0,nodoAlaIB01);
+		Ogre::TransformKeyFrame* keyA02;
+		keyA02 = AniAlaIB01->createNodeKeyFrame(0.0);
+		keyA02 -> setRotation(Quaternion(Degree(0.0), Vector3::UNIT_Z));
+		keyA02 = AniAlaIB01->createNodeKeyFrame(5.0);
+		keyA02 -> setRotation(Quaternion(Degree(10), Vector3::UNIT_Z));
+		AnimacionAlasAbrir01 = mSceneMgr->createAnimationState("AnimAbrirAlas01");
+		AnimacionAlasAbrir01->setLoop(false);
+float durationA03 = 5.0f;
+		Ogre::Animation* animacionAbrirAlas03 = mSceneMgr->createAnimation("AnimAbrirAlas02",durationA03);
+		animacionAbrirAlas03->setInterpolationMode(Animation::IM_SPLINE);
+		Ogre::NodeAnimationTrack* AniAlaI02 = animacionAbrirAlas03->createNodeTrack(0,nodoAlaI02);
+		Ogre::TransformKeyFrame* keyA03;
+		keyA03 = AniAlaI02->createNodeKeyFrame(0.0);
+		keyA03 -> setRotation(Quaternion(Degree(0.0), Vector3::UNIT_Z));
+		keyA03 = AniAlaI02->createNodeKeyFrame(5.0);
+		keyA03 -> setRotation(Quaternion(Degree(10), Vector3::UNIT_Z));
+		AnimacionAlasAbrir03 = mSceneMgr->createAnimationState("AnimAbrirAlas02");
+		AnimacionAlasAbrir03->setLoop(false);
+float durationA04 = 5.0f;
+		Ogre::Animation* animacionAbrirAlas04 = mSceneMgr->createAnimation("AnimAbrirAlas03",durationA04);
+		animacionAbrirAlas04->setInterpolationMode(Animation::IM_SPLINE);
+		Ogre::NodeAnimationTrack* AniAlaB03 = animacionAbrirAlas04->createNodeTrack(0,nodoAlaB03);
+		Ogre::TransformKeyFrame* keyA04;
+		keyA04 = AniAlaB03->createNodeKeyFrame(0.0);
+		keyA04 -> setRotation(Quaternion(Degree(0.0), Vector3::UNIT_Z));
+		keyA04 = AniAlaB03->createNodeKeyFrame(5.0);
+		keyA04 -> setRotation(Quaternion(Degree(-10), Vector3::UNIT_Z));
+		AnimacionAlasAbrir04 = mSceneMgr->createAnimationState("AnimAbrirAlas03");
+		AnimacionAlasAbrir04->setLoop(false);
 
+*/
+		
 
 
 		/*
