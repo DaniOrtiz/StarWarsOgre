@@ -92,15 +92,28 @@ public:
 			return false;
 
 		// Teclas para la mover la camara
-
+		
 		// Si presionamos la tecla w
-		if(_key->isKeyDown(OIS::KC_W))
-			tcam += Ogre::Vector3(0,0,-10);
+		float l = 0.0;
+		float b = 0.0;
+		float c = 0.0;
+		if(_key->isKeyDown(OIS::KC_W)){
+			c -= 10;
+			if (c >= -1300){
+				tcam += Ogre::Vector3(l,b,c);
+			}
+		}
 
 		// Si presionamos la tecla a
-		if(_key->isKeyDown(OIS::KC_A))
-			tcam += Ogre::Vector3(-10,0,0);
-
+		float d = 0.0;
+		float e = 0.0;
+		float f = 0.0;
+		if(_key->isKeyDown(OIS::KC_A)){
+			d -= 1;
+			if (d >= -33){
+				tcam += Ogre::Vector3(d,e,f);
+			}
+		}
 		if(_key->isKeyDown(OIS::KC_E)){			
 			AnimacionAlasAbrir01->setEnabled(true);
 			//AnimacionAlasAbrir02->setEnabled(true);
@@ -125,9 +138,15 @@ public:
 		}
 
 		// Si presionamos la tecla d
-		if(_key->isKeyDown(OIS::KC_D))
-			tcam += Ogre::Vector3(10,0,0);
-
+		float h = 0.0;
+		float i = 0.0;
+		float j = 0.0;
+		if(_key->isKeyDown(OIS::KC_D)){
+			h += 1;
+			if (h <= 33){
+				tcam += Ogre::Vector3(h,i,j);
+			}
+		}
 		// Camara Control
 		//float rotX = _mouse->getMouseState().X.rel * evt.timeSinceLastFrame * -1;
 		//float rotY = _mouse->getMouseState().Y.rel * evt.timeSinceLastFrame * -1;
@@ -529,7 +548,6 @@ public:
 		AnimacionAlasAbrir01->setLoop(false);
 
 		/*
-
 float durationA02 = 5.0f;
 		Ogre::Animation* animacionAbrirAlas02 = mSceneMgr->createAnimation("AnimAbrirAlas01",durationA02);
 		animacionAbrirAlas02->setInterpolationMode(Animation::IM_SPLINE);
@@ -563,7 +581,6 @@ float durationA04 = 5.0f;
 		keyA04 -> setRotation(Quaternion(Degree(-10), Vector3::UNIT_Z));
 		AnimacionAlasAbrir04 = mSceneMgr->createAnimationState("AnimAbrirAlas03");
 		AnimacionAlasAbrir04->setLoop(false);
-
 */
 		
 
