@@ -212,11 +212,6 @@ public:
 		mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 		mSceneMgr->setSkyBox(true, "AndreaCenteno_Estrellas/SkyBox");
 
-		Ogre::Entity* ent01 = mSceneMgr->createEntity("MyEntity1","ejes01.mesh");
-		Ogre::SceneNode* node01 = mSceneMgr->createSceneNode("Node01");
-		mSceneMgr->getRootSceneNode()->addChild(node01);
-		node01->attachObject(ent01);
-
 		Ogre::Entity* entEscena01 = mSceneMgr->createEntity("ogre_base01.mesh");
 		mSceneMgr->getRootSceneNode()->attachObject(entEscena01);
 
