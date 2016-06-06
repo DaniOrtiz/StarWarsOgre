@@ -1,15 +1,9 @@
 #include "Ogre\ExampleApplication.h"
 
-
-Ogre::AnimationState* AnimacionAlasAbrir01;
-Ogre::AnimationState* AnimacionAlasAbrir02;
-Ogre::AnimationState* AnimacionAlasAbrir03;
-Ogre::AnimationState* AnimacionAlasAbrir04;
-
-Ogre::AnimationState* AnimacionAlasCerrar01;
-Ogre::AnimationState* AnimacionAlasCerrar02;
-Ogre::AnimationState* AnimacionAlasCerrar03;
-Ogre::AnimationState* AnimacionAlasCerrar04;
+float ang = 10; 
+float r = 0;
+bool abiertas = false;
+float angN = 0.0;
 
 Ogre::AnimationState* animationLaser01;
 Ogre::AnimationState* animationLaser02;
@@ -31,8 +25,6 @@ private:
 	Ogre::SceneNode*  _nodoAlaI02;  
 	Ogre::SceneNode*  _nodoAlaD01;  
 	Ogre::SceneNode*  _nodoAlaD02;  
-
-
 
 public:
 	// Constructor que le asignamos el nodo que creamos
@@ -92,59 +84,50 @@ public:
 			return false;
 
 		// Teclas para la mover la camara
-		
+			
 		// Si presionamos la tecla w
-		float l = 0.0;
-		float b = 0.0;
-		float c = 0.0;
-		if(_key->isKeyDown(OIS::KC_W)){
-			c -= 10;
-			if (c >= -1300){
-				tcam += Ogre::Vector3(l,b,c);
-			}
+		if(_key->isKeyDown(OIS::KC_W)){			
+			tcam += Ogre::Vector3(0,0,-10);
 		}
 
 		// Si presionamos la tecla a
-		float d = 0.0;
-		float e = 0.0;
-		float f = 0.0;
-		if(_key->isKeyDown(OIS::KC_A)){
-			d -= 1;
-			if (d >= -33){
-				tcam += Ogre::Vector3(d,e,f);
-			}
-		}
-		if(_key->isKeyDown(OIS::KC_E)){			
-			AnimacionAlasAbrir01->setEnabled(true);
-			//AnimacionAlasAbrir02->setEnabled(true);
-			//AnimacionAlasAbrir03->setEnabled(true);
-			//AnimacionAlasAbrir04->setEnabled(true);
-			//_nodoAlaI01->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame ) );
-			//_nodoAlaI02->roll(Ogre::Degree(-10 * evt.timeSinceLastFrame) );
-			//_nodoAlaD01->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame ) );
-			//_nodoAlaD02->roll(Ogre::Degree(-10 * evt.timeSinceLastFrame ) );	
-			//AnimacionAlasAbrir->addTime(evt.timeSinceLastFrame);
-		}
-
-		if(_key->isKeyDown(OIS::KC_R)){		
-			//AnimacionAlasCerrar01->setEnabled(true);
-			//AnimacionAlasCerrar02->setEnabled(true);
-			//AnimacionAlasCerrar03->setEnabled(true);
-			//AnimacionAlasCerrar04->setEnabled(true);	
-			//_nodoAlaI01->roll(Ogre::Degree(-10 * evt.timeSinceLastFrame ) );
-			//_nodoAlaI02->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame) );
-			//_nodoAlaD01->roll(Ogre::Degree(-10 * evt.timeSinceLastFrame ) );
-			//_nodoAlaD02->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame ) );	
+		if(_key->isKeyDown(OIS::KC_A)){	
+			tcam += Ogre::Vector3(-10,0,0);	
+			if( r < 0) r = 0;
+			else if(r == 0) r = 0.5;
+			_nodoNave->roll(Ogre::Degree(r));
 		}
 
 		// Si presionamos la tecla d
-		float h = 0.0;
-		float i = 0.0;
-		float j = 0.0;
-		if(_key->isKeyDown(OIS::KC_D)){
-			h += 1;
-			if (h <= 33){
-				tcam += Ogre::Vector3(h,i,j);
+		if(_key->isKeyDown(OIS::KC_D)){			
+			tcam += Ogre::Vector3(10,0,0);
+			if( r > 0) r = 0;
+			else if(r == 0) r = -0.5;
+			_nodoNave->roll(Ogre::Degree(r));
+		}
+
+
+		if(_key->isKeyDown(OIS::KC_E)){	
+			angN += 10 * evt.timeSinceLastFrame;
+			if(angN < 20){
+				_nodoAlaI01->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame ) );
+				_nodoAlaI02->roll(Ogre::Degree(-10 * evt.timeSinceLastFrame) );
+				_nodoAlaD01->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame ) );
+				_nodoAlaD02->roll(Ogre::Degree(-10 * evt.timeSinceLastFrame ) );
+			}else{
+				angN -= 10 * evt.timeSinceLastFrame;
+			}
+		}
+
+		if(_key->isKeyDown(OIS::KC_R)){		
+			angN -= 10 * evt.timeSinceLastFrame;
+			if(angN > 0){
+				_nodoAlaI01->roll(Ogre::Degree(-10 * evt.timeSinceLastFrame ) );
+				_nodoAlaI02->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame) );
+				_nodoAlaD01->roll(Ogre::Degree(-10 * evt.timeSinceLastFrame ) );
+				_nodoAlaD02->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame ) );	
+			}else{
+				angN += 10 * evt.timeSinceLastFrame;
 			}
 		}
 		// Camara Control
@@ -161,11 +144,6 @@ public:
 		animationLaser02 -> addTime(evt.timeSinceLastFrame);
 		animationLaser03 -> addTime(evt.timeSinceLastFrame);
 		animationLaser04 -> addTime(evt.timeSinceLastFrame);
-
-		AnimacionAlasAbrir01 -> addTime(evt.timeSinceLastFrame);
-		//AnimacionAlasAbrir02 -> addTime(evt.timeSinceLastFrame);
-		//AnimacionAlasAbrir03 -> addTime(evt.timeSinceLastFrame);
-		//AnimacionAlasAbrir04 -> addTime(evt.timeSinceLastFrame);
 		
 		return true;
 
@@ -469,7 +447,6 @@ public:
 		nodoTurbinas01->setScale(0.26,0.4,0.26);
 		nodoTurbinas01->attachObject(entTurbinas01);
 		entTurbinas01->setMaterialName("DanielaOrtiz_Nave/Gris");
-		//entTurbinas01->setMaterial(materialTorretas);
 
 		Ogre::Entity* entTurbinas01a = mSceneMgr->createEntity("usb_cilindro.mesh");
 		Ogre::SceneNode* nodoTurbinas01a = mSceneMgr->createSceneNode("NodoTurbinas01a");
@@ -487,7 +464,6 @@ public:
 		nodoTurbinas02->setScale(0.26,0.4,0.26);
 		nodoTurbinas02->attachObject(entTurbinas02);
 		entTurbinas02->setMaterialName("DanielaOrtiz_Nave/Gris");
-		//entTurbinas02->setMaterial(materialTorretas);
 
 		Ogre::Entity* entTurbinas02a = mSceneMgr->createEntity("usb_cilindro.mesh");
 		Ogre::SceneNode* nodoTurbinas02a = mSceneMgr->createSceneNode("NodoTurbinas02a");
@@ -505,7 +481,6 @@ public:
 		nodoTurbinas03->setScale(0.26,0.4,0.26);
 		nodoTurbinas03->attachObject(entTurbinas03);
 		entTurbinas03->setMaterialName("DanielaOrtiz_Nave/Gris");
-		//entTurbinas03->setMaterial(materialTorretas);
 
 		Ogre::Entity* entTurbinas03a = mSceneMgr->createEntity("usb_cilindro.mesh");
 		Ogre::SceneNode* nodoTurbinas03a = mSceneMgr->createSceneNode("NodoTurbinas03a");
@@ -523,7 +498,6 @@ public:
 		nodoTurbinas04->setScale(0.26,0.4,0.26);
 		nodoTurbinas04->attachObject(entTurbinas04);
 		entTurbinas04->setMaterialName("DanielaOrtiz_Nave/Gris");
-		//entTurbinas04->setMaterial(materialTorretas);
 
 		Ogre::Entity* entTurbinas04a = mSceneMgr->createEntity("usb_cilindro.mesh");
 		Ogre::SceneNode* nodoTurbinas04a = mSceneMgr->createSceneNode("NodoTurbinas04a");
@@ -532,57 +506,6 @@ public:
 		nodoTurbinas04a->setScale(0.8,1,0.8);
 		nodoTurbinas04a->attachObject(entTurbinas04a);
 		entTurbinas04a->setMaterialName("DanielaOrtiz_Nave/Gris");
-
-
-
-		float durationA = 5.0f;
-		Ogre::Animation* animacionAbrirAlas01 = mSceneMgr->createAnimation("AnimAbrirAlas",durationA);
-		animacionAbrirAlas01->setInterpolationMode(Animation::IM_SPLINE);
-		Ogre::NodeAnimationTrack* AniAlaD02 = animacionAbrirAlas01->createNodeTrack(0,nodoAlaD02);
-		Ogre::TransformKeyFrame* keyA;
-		keyA = AniAlaD02->createNodeKeyFrame(0.0);
-		keyA -> setRotation(Quaternion(Degree(0.0), Vector3::UNIT_Z));
-		keyA = AniAlaD02->createNodeKeyFrame(5.0);
-		keyA -> setRotation(Quaternion(Degree(-10), Vector3::UNIT_Z));
-		AnimacionAlasAbrir01 = mSceneMgr->createAnimationState("AnimAbrirAlas");
-		AnimacionAlasAbrir01->setLoop(false);
-
-		/*
-float durationA02 = 5.0f;
-		Ogre::Animation* animacionAbrirAlas02 = mSceneMgr->createAnimation("AnimAbrirAlas01",durationA02);
-		animacionAbrirAlas02->setInterpolationMode(Animation::IM_SPLINE);
-		Ogre::NodeAnimationTrack* AniAlaIB01 = animacionAbrirAlas02->createNodeTrack(0,nodoAlaIB01);
-		Ogre::TransformKeyFrame* keyA02;
-		keyA02 = AniAlaIB01->createNodeKeyFrame(0.0);
-		keyA02 -> setRotation(Quaternion(Degree(0.0), Vector3::UNIT_Z));
-		keyA02 = AniAlaIB01->createNodeKeyFrame(5.0);
-		keyA02 -> setRotation(Quaternion(Degree(10), Vector3::UNIT_Z));
-		AnimacionAlasAbrir01 = mSceneMgr->createAnimationState("AnimAbrirAlas01");
-		AnimacionAlasAbrir01->setLoop(false);
-float durationA03 = 5.0f;
-		Ogre::Animation* animacionAbrirAlas03 = mSceneMgr->createAnimation("AnimAbrirAlas02",durationA03);
-		animacionAbrirAlas03->setInterpolationMode(Animation::IM_SPLINE);
-		Ogre::NodeAnimationTrack* AniAlaI02 = animacionAbrirAlas03->createNodeTrack(0,nodoAlaI02);
-		Ogre::TransformKeyFrame* keyA03;
-		keyA03 = AniAlaI02->createNodeKeyFrame(0.0);
-		keyA03 -> setRotation(Quaternion(Degree(0.0), Vector3::UNIT_Z));
-		keyA03 = AniAlaI02->createNodeKeyFrame(5.0);
-		keyA03 -> setRotation(Quaternion(Degree(10), Vector3::UNIT_Z));
-		AnimacionAlasAbrir03 = mSceneMgr->createAnimationState("AnimAbrirAlas02");
-		AnimacionAlasAbrir03->setLoop(false);
-float durationA04 = 5.0f;
-		Ogre::Animation* animacionAbrirAlas04 = mSceneMgr->createAnimation("AnimAbrirAlas03",durationA04);
-		animacionAbrirAlas04->setInterpolationMode(Animation::IM_SPLINE);
-		Ogre::NodeAnimationTrack* AniAlaB03 = animacionAbrirAlas04->createNodeTrack(0,nodoAlaB03);
-		Ogre::TransformKeyFrame* keyA04;
-		keyA04 = AniAlaB03->createNodeKeyFrame(0.0);
-		keyA04 -> setRotation(Quaternion(Degree(0.0), Vector3::UNIT_Z));
-		keyA04 = AniAlaB03->createNodeKeyFrame(5.0);
-		keyA04 -> setRotation(Quaternion(Degree(-10), Vector3::UNIT_Z));
-		AnimacionAlasAbrir04 = mSceneMgr->createAnimationState("AnimAbrirAlas03");
-		AnimacionAlasAbrir04->setLoop(false);
-*/
-		
 
 
 		/*
