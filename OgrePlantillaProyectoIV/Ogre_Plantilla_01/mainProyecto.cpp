@@ -77,6 +77,8 @@ public:
 		float a = 0.0;
 		bool abiertas = false;
 
+		Ogre::Vector3 x;
+
 		if (_key->isKeyDown(OIS::KC_ESCAPE))
 			return false;
 
@@ -90,20 +92,22 @@ public:
 		if(_key->isKeyDown(OIS::KC_A))
 			tcam += Ogre::Vector3(-10,0,0);
 
-		if(_key->isKeyDown(OIS::KC_E) && !abiertas){			
+		if(_key->isKeyDown(OIS::KC_E)){			
+
+			AnimacionAlasAbrir->setEnabled(true);
 			abiertas = true;		
-			_nodoAlaI01->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame ) );
-			_nodoAlaI02->roll(Ogre::Degree(-10  * evt.timeSinceLastFrame) );
-			_nodoAlaD01->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame ) );
-			_nodoAlaD02->roll(Ogre::Degree(-10 * evt.timeSinceLastFrame ) );	
+			//_nodoAlaI01->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame ) );
+			//_nodoAlaI02->roll(Ogre::Degree(-10 * evt.timeSinceLastFrame) );
+			//_nodoAlaD01->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame ) );
+			//_nodoAlaD02->roll(Ogre::Degree(-10 * evt.timeSinceLastFrame ) );	
 			//AnimacionAlasAbrir->addTime(evt.timeSinceLastFrame);
 		}
 
-		if(_key->isKeyDown(OIS::KC_R) && abiertas){			
-			_nodoAlaI01->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame ) );
-			_nodoAlaI02->roll(Ogre::Degree(-10  * evt.timeSinceLastFrame) );
-			_nodoAlaD01->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame ) );
-			_nodoAlaD02->roll(Ogre::Degree(-10 * evt.timeSinceLastFrame ) );	
+		if(_key->isKeyDown(OIS::KC_R)){			
+			//_nodoAlaI01->roll(Ogre::Degree(-10 * evt.timeSinceLastFrame ) );
+			//_nodoAlaI02->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame) );
+			//_nodoAlaD01->roll(Ogre::Degree(-10 * evt.timeSinceLastFrame ) );
+			//_nodoAlaD02->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame ) );	
 			abiertas = false;
 		}
 
@@ -112,15 +116,12 @@ public:
 			tcam += Ogre::Vector3(10,0,0);
 
 		// Camara Control
-		float rotX = _mouse->getMouseState().X.rel * evt.timeSinceLastFrame * -1;
-		float rotY = _mouse->getMouseState().Y.rel * evt.timeSinceLastFrame * -1;
-		_cam->yaw(Ogre::Radian(rotX));
-		_cam->pitch(Ogre::Radian(rotY));
+		//float rotX = _mouse->getMouseState().X.rel * evt.timeSinceLastFrame * -1;
+		//float rotY = _mouse->getMouseState().Y.rel * evt.timeSinceLastFrame * -1;
+		//_cam->yaw(Ogre::Radian(rotX));
+		//_cam->pitch(Ogre::Radian(rotY));
 		_cam->moveRelative(tcam*movSpeed*evt.timeSinceLastFrame);
-
-		//_nodoNave->translate(tcam*movSpeed*evt.timeSinceLastFrame);
-		//_nodoNave->yaw(Ogre::Radian(rotX));
-		//_nodoNave->pitch(Ogre::Radian(rotY));
+		_nodoNave->translate(tcam*movSpeed*evt.timeSinceLastFrame);
 
 		//Animacion de los Laser
 		
@@ -128,6 +129,8 @@ public:
 		animationLaser02 -> addTime(evt.timeSinceLastFrame);
 		animationLaser03 -> addTime(evt.timeSinceLastFrame);
 		animationLaser04 -> addTime(evt.timeSinceLastFrame);
+
+		AnimacionAlasAbrir -> addTime(evt.timeSinceLastFrame);
 		return true;
 
 	}
@@ -168,7 +171,7 @@ public:
 	void createCamera() {
 
 		mCamera = mSceneMgr->createCamera("MyCamera1");
-		mCamera->setPosition(0.0,5,34);
+		mCamera->setPosition(0.0,0.0,34);
 		mCamera->lookAt(0,0,-50);
 		mCamera->setNearClipDistance(5);
 	}
@@ -496,41 +499,23 @@ public:
 
 
 
-
-
-
-
-		/*
-
-
-float duration = 3.0f;
-
-		mRotSrc = AniAlaD02->getOrientation();
-		mRotDest = src.getRotationTo(mDirection);
-		mNode->rotate(Quaternion::Slerp(mRotProgress, mRotSrc, mRotDest)); 
-
-		Ogre::Animation* animacionAbrirAlas = mSceneMgr->createAnimation("AnimAbrirAlas",duration);
+		float durationA = 3.0f;
+		Ogre::Animation* animacionAbrirAlas = mSceneMgr->createAnimation("AnimAbrirAlas",durationA);
 		animacionAbrirAlas->setInterpolationMode(Animation::IM_SPLINE);
-
 		Ogre::NodeAnimationTrack* AniAlaD02 = animacionAbrirAlas->createNodeTrack(0,nodoAlaD02);
-
-		Ogre::TransformKeyFrame* key;
+		Ogre::TransformKeyFrame* keyA;
 
 		//FRAMES
-		key = AniAlaD02->createNodeKeyFrame(0.0);
-   		key->setRotation(Quaternion q(Degree(90), Vector3::UNIT_Z));
+		keyA = AniAlaD02->createNodeKeyFrame(0.0);
+		//[cos(a/2), sin(a/2) * nx, sin(a/2)* ny, sin(a/2) * nz]
+   		keyA -> setRotation(Quaternion(Degree(0.0), Vector3::UNIT_Z));
 
-		key = AniAlaD02->createNodeKeyFrame(3.0);
-   		key->setRotation(Quaternion::Slerp(1,-10,0.0,false));
-
-		key = AniAlaD02->createNodeKeyFrame(6.0);
-   		key->setRotation(Quaternion::Slerp(1,0.0,-10,false));
-
-		AnimacionAlasAbrir = mSceneMgr->createAnimationState("AnimLuz01");
-		AnimacionAlasAbrir->setEnabled(true);
-		AnimacionAlasAbrir->setLoop(true);
-
-		*/
+		keyA = AniAlaD02->createNodeKeyFrame(5.0);
+		//[cos(a/2), sin(a/2) * nx, sin(a/2)* ny, sin(a/2) * nz]
+   		keyA -> setRotation(Quaternion(Degree(10), Vector3::UNIT_Z));
+				
+		AnimacionAlasAbrir = mSceneMgr->createAnimationState("AnimAbrirAlas");
+		AnimacionAlasAbrir->setLoop(false);
 
 
 
