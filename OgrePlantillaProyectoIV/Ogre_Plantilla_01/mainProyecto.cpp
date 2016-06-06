@@ -4,6 +4,8 @@ float ang = 10;
 float r = 0;
 bool abiertas = false;
 float angN = 0.0;
+float maxX = 0.0;
+float maxy = 0.0;
 
 Ogre::AnimationState* animationLaser01;
 Ogre::AnimationState* animationLaser02;
@@ -86,24 +88,37 @@ public:
 		// Teclas para la mover la camara
 			
 		// Si presionamos la tecla w
-		if(_key->isKeyDown(OIS::KC_W)){			
-			tcam += Ogre::Vector3(0,0,-10);
+		if(_key->isKeyDown(OIS::KC_W)){		
+			maxy -= 0.53;
+			if(maxy > -1300){
+				tcam += Ogre::Vector3(0,0,-10);
+			}
 		}
 
 		// Si presionamos la tecla a
 		if(_key->isKeyDown(OIS::KC_A)){	
-			tcam += Ogre::Vector3(-10,0,0);	
-			if( r < 0) r = 0;
-			else if(r == 0) r = 0.5;
-			_nodoNave->roll(Ogre::Degree(r));
+			maxX -= 0.6;
+			if(maxX > -28){
+				tcam += Ogre::Vector3(-10,0,0);	
+				if( r < 0) r = 0;
+				else if(r == 0) r = 0.3;
+				_nodoNave->roll(Ogre::Degree(r));
+			}else{
+				maxX += 0.6;
+			}
 		}
 
 		// Si presionamos la tecla d
-		if(_key->isKeyDown(OIS::KC_D)){			
-			tcam += Ogre::Vector3(10,0,0);
-			if( r > 0) r = 0;
-			else if(r == 0) r = -0.5;
-			_nodoNave->roll(Ogre::Degree(r));
+		if(_key->isKeyDown(OIS::KC_D)){	
+			maxX += 0.6;
+			if(maxX < 28){
+				tcam += Ogre::Vector3(10,0,0);
+				if( r > 0) r = 0;
+				else if(r == 0) r = -0.3;
+				_nodoNave->roll(Ogre::Degree(r));				
+			}else{
+				maxX -= 0.6;
+			}
 		}
 
 
