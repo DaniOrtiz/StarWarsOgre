@@ -1,8 +1,6 @@
 #include "Ogre\ExampleApplication.h"
 
-float r = 1.0;
-float xnave = 0.0, ynave = 0.0, znave = 0.0;
-float ang = 0.0;
+Ogre::AnimationState* AnimacionAlasAbrir;
 
 class FrameListenerClase : public Ogre::FrameListener { // Hereda de la clase FrameListener de Ogre, escucha algo
 
@@ -19,28 +17,21 @@ private:
 	Ogre::SceneNode *cameraPitchNode;
 	Ogre::SceneNode *cameraRollNode;
 
+	//movimiento alas
+	Ogre::SceneNode*  _nodoAlaI01;  
+	Ogre::SceneNode*  _nodoAlaI02;  
+	Ogre::SceneNode*  _nodoAlaD01;  
+	Ogre::SceneNode*  _nodoAlaD02;  
+
 public:
 	// Constructor que le asignamos el nodo que creamos
 	FrameListenerClase(Ogre::SceneNode* nodoNave01, 
+					   Ogre::SceneNode* nodoAlaI01, 
+					   Ogre::SceneNode* nodoAlaI02, 
+					   Ogre::SceneNode* nodoAlaD01, 
+					   Ogre::SceneNode* nodoAlaD02, 
 					   Ogre::Camera* cam, 
 					   RenderWindow* win) {
-		
-/*
-		// Create the camera's top node (which will only handle position).
-		this->cameraNode = this->sceneManager->getRootSceneNode()->createChildSceneNode();
-		this->cameraNode->setPosition(0, 0, 500);
-
-		// Create the camera's yaw node as a child of camera's top node.
-		this->cameraYawNode = this->cameraNode->createChildSceneNode();
-
-		// Create the camera's pitch node as a child of camera's yaw node.
-		this->cameraPitchNode = this->cameraYawNode->createChildSceneNode();
-
-		// Create the camera's roll node as a child of camera's pitch node
-		// and attach the camera to it.
-		this->cameraRollNode = this->cameraPitchNode->createChildSceneNode();
-		this->cameraRollNode->attachObject(this->camera);
-*/
 
 		// Configuracion captura teclado y mouse
 		// ESTO ES ASI PORQUE SI, NO CAMBIA
@@ -59,6 +50,12 @@ public:
 		_mouse = static_cast< OIS::Mouse*>(_man->createInputObject(OIS::OISMouse, false));
 
 		_nodoNave = nodoNave01;
+
+		_nodoAlaI01 = nodoAlaI01;
+		_nodoAlaI02 = nodoAlaI02;
+		_nodoAlaD01 = nodoAlaD01;
+		_nodoAlaD02 = nodoAlaD02;
+
 		_cam = cam;
 	}
 
@@ -75,6 +72,8 @@ public:
 
 		float movSpeed = 10.0f;
 		Ogre::Vector3 tcam(0,0,0);
+		float a = 0.0;
+		bool abiertas = false;
 
 		if (_key->isKeyDown(OIS::KC_ESCAPE))
 			return false;
@@ -89,11 +88,22 @@ public:
 		if(_key->isKeyDown(OIS::KC_A))
 			tcam += Ogre::Vector3(-10,0,0);
 
-		if(_key->isKeyDown(OIS::KC_E))
-			ang = 10.0;
+		if(_key->isKeyDown(OIS::KC_E) && !abiertas){			
+			abiertas = true;		
+			_nodoAlaI01->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame ) );
+			_nodoAlaI02->roll(Ogre::Degree(-10  * evt.timeSinceLastFrame) );
+			_nodoAlaD01->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame ) );
+			_nodoAlaD02->roll(Ogre::Degree(-10 * evt.timeSinceLastFrame ) );	
+			//AnimacionAlasAbrir->addTime(evt.timeSinceLastFrame);
+		}
 
-		if(_key->isKeyDown(OIS::KC_R))
-			ang = 0.0;
+		if(_key->isKeyDown(OIS::KC_R) && abiertas){			
+			_nodoAlaI01->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame ) );
+			_nodoAlaI02->roll(Ogre::Degree(-10  * evt.timeSinceLastFrame) );
+			_nodoAlaD01->roll(Ogre::Degree( 10 * evt.timeSinceLastFrame ) );
+			_nodoAlaD02->roll(Ogre::Degree(-10 * evt.timeSinceLastFrame ) );	
+			abiertas = false;
+		}
 
 		// Si presionamos la tecla d
 		if(_key->isKeyDown(OIS::KC_D))
@@ -109,6 +119,7 @@ public:
 		//_nodoNave->translate(tcam*movSpeed*evt.timeSinceLastFrame);
 		//_nodoNave->yaw(Ogre::Radian(rotX));
 		//_nodoNave->pitch(Ogre::Radian(rotY));
+
 		return true;
 	}
 };
@@ -119,6 +130,11 @@ class Example1 : public ExampleApplication
 public:
 	Ogre::SceneNode* nodoNave;
 	Ogre::FrameListener* FrameListener01; // Objeto de FrameListener
+
+	Ogre::SceneNode* nodoAlaI02;
+	Ogre::SceneNode* nodoAlaI01;
+	Ogre::SceneNode* nodoAlaD01;
+	Ogre::SceneNode* nodoAlaD02;
 
 	//Ogre::SceneNode* nodeCamara;
 
@@ -136,14 +152,14 @@ public:
 
 	// Metodo
 	void createFrameListener() {
-		FrameListener01 = new FrameListenerClase(nodoNave,mCamera, mWindow); 
+		FrameListener01 = new FrameListenerClase(nodoNave,nodoAlaI02,nodoAlaI01,nodoAlaD01,nodoAlaD02,mCamera, mWindow); 
 		mRoot->addFrameListener(FrameListener01);
 	}
 
 	void createCamera() {
 
 		mCamera = mSceneMgr->createCamera("MyCamera1");
-		mCamera->setPosition(0.0,0.0,30);
+		mCamera->setPosition(0.0,5,34);
 		mCamera->lookAt(0,0,-50);
 		mCamera->setNearClipDistance(5);
 	}
@@ -153,8 +169,7 @@ public:
 
 		mSceneMgr->setAmbientLight(Ogre::ColourValue(1.0, 1.0, 1.0));
 		mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
-		mSceneMgr->setSkyBox(true, "Estrellas/SkyBox");
-		//mSceneMgr->setSkyDome(true, "Estrellas/SkyDome", 1, 1);	
+		mSceneMgr->setSkyBox(true, "AndreaCenteno_Estrellas/SkyBox");
 
 		Ogre::Entity* ent01 = mSceneMgr->createEntity("MyEntity1","ejes01.mesh");
 		Ogre::SceneNode* node01 = mSceneMgr->createSceneNode("Node01");
@@ -206,7 +221,7 @@ public:
 		const float z1 = 6.0;
 		//parte de atras de la nave
 		ManualObject* manual = mSceneMgr->createManualObject("manual");
-		manual->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
+		manual->begin("DanielaOrtiz_Nave/Gris", RenderOperation::OT_TRIANGLE_STRIP);
 
 			manual->position( 2.3, 0.0, z1-7);
 			manual->position(  x1, -y1, z1);
@@ -233,12 +248,12 @@ public:
 		nodoNave = mSceneMgr->createSceneNode("NodoNave");
 		mSceneMgr->getRootSceneNode()->addChild(nodoNave);
 		nodoNave->attachObject(entNave);
-		nodoNave->translate(0.0,-5,0.0);
-		//entNave->setMaterialName("Nave/Gris");
+		nodoNave->translate(0.0,-2,0.0);
+		//entNave->setMaterialName("DanielaOrtiz_Nave/Gris");
 
 		//cara de atras
 		ManualObject* manualCara = mSceneMgr->createManualObject("manualCara");
-		manualCara->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
+		manualCara->begin("DanielaOrtiz_Nave/Gris", RenderOperation::OT_TRIANGLE_STRIP);
 
 			manualCara->position(-2.3, 0.0, z1);
 			manualCara->position( -x1, -y1, z1);
@@ -263,7 +278,7 @@ public:
 		const float z2 = -8.0;
 		//parte de al frente
 		ManualObject* manualFrente = mSceneMgr->createManualObject("manualFrente");
-		manualFrente->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
+		manualFrente->begin("DanielaOrtiz_Nave/Gris", RenderOperation::OT_TRIANGLE_STRIP);
 
 			manualFrente->position( 0.8, 0.0, z2);
 			manualFrente->position(  x1, -y1, z2+7);
@@ -300,12 +315,12 @@ public:
 		*/
 		//	Mesh de las laas
 		Ogre::ManualObject* manualAlaCara = mSceneMgr->createManualObject("manualAlaCara");
-			manualAlaCara->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
+			manualAlaCara->begin("DanielaOrtiz_Nave/Gris", RenderOperation::OT_TRIANGLE_STRIP);
 
-			manualAlaCara->position(2, 1.0, 6);
-			manualAlaCara->position(7, 1.0, 4);
-			manualAlaCara->position(7, 1.0, 2);
-			manualAlaCara->position(2, 1.0, 0);
+			manualAlaCara->position(2, 0.3, 6);
+			manualAlaCara->position(8, 0.3, 4);
+			manualAlaCara->position(8, 0.3, 2);
+			manualAlaCara->position(2, 0.3, 0);
 
 			for(int i = 0; i < 5; i++){
 				manualAlaCara->index(i);
@@ -314,16 +329,16 @@ public:
 		manualAlaCara->convertToMesh("MeshAlaCara");
 
 		Ogre::ManualObject* manualAlaBorde = mSceneMgr->createManualObject("manualAlaBorde");
-			manualAlaBorde->begin("BaseWhiteNoLighting", RenderOperation::OT_TRIANGLE_STRIP);
+			manualAlaBorde->begin("DanielaOrtiz_Nave/Gris", RenderOperation::OT_TRIANGLE_STRIP);
 
-			manualAlaBorde->position( 2, 1.0, 6);
-			manualAlaBorde->position( 2, 0.5, 6);
-			manualAlaBorde->position( 7, 1.0, 4);
-			manualAlaBorde->position( 7, 0.5, 4);
-			manualAlaBorde->position( 7, 1.0, 2);
-			manualAlaBorde->position( 7, 0.5, 2);
-			manualAlaBorde->position( 2, 1.0, 0);
-			manualAlaBorde->position( 2, 0.5, 0);
+			manualAlaBorde->position( 2, 0.3, 6);
+			manualAlaBorde->position( 2, 0.0, 6);
+			manualAlaBorde->position( 8, 0.3, 4);
+			manualAlaBorde->position( 8, 0.0, 4);
+			manualAlaBorde->position( 8, 0.3, 2);
+			manualAlaBorde->position( 8, 0.0, 2);
+			manualAlaBorde->position( 2, 0.3, 0);
+			manualAlaBorde->position( 2, 0.0, 0);
 
 			for(int i = 0; i < 9; i++){
 				manualAlaBorde->index(i);
@@ -331,38 +346,16 @@ public:
 		manualAlaBorde->end();
 		manualAlaBorde->convertToMesh("MeshAlaBorde");
 
-		//CARAS IZQUIERDAS ALAS
-		Ogre::Entity* entAlaI02 = mSceneMgr->createEntity("MeshAlaCara");
-		Ogre::SceneNode* nodoAlaI02 = mSceneMgr->createSceneNode("NodoAlaI02");
-		nodoNave->addChild(nodoAlaI02);
-		nodoAlaI02->yaw(Ogre::Degree( 180 ) );
-		nodoAlaI02->translate(0.0,0.0,6);
-		nodoAlaI02->roll(Ogre::Degree( ang ) );
-		nodoAlaI02->attachObject(entAlaI02);
-		//borde
-		Ogre::Entity* entAlaB03 = mSceneMgr->createEntity("MeshAlaBorde");
-		Ogre::SceneNode* nodoAlaB03 = mSceneMgr->createSceneNode("NodoAlaB03");
-		nodoAlaI02->addChild(nodoAlaB03);
-		nodoAlaB03->attachObject(entAlaB03);
-
-		Ogre::Entity* entAlaI01 = mSceneMgr->createEntity("MeshAlaCara");
-		Ogre::SceneNode* nodoAlaI01 = mSceneMgr->createSceneNode("NodoAlaI01");
-		nodoNave->addChild(nodoAlaI01);
-		nodoAlaI01->yaw(Ogre::Degree( 180 ) );
-		nodoAlaI01->translate(0.0,-0.5,6);
-		nodoAlaI01->roll(Ogre::Degree( -ang ) );
-		nodoAlaI01->attachObject(entAlaI01);
-		//borde
-		Ogre::Entity* entAlaB04 = mSceneMgr->createEntity("MeshAlaBorde");
-		Ogre::SceneNode* nodoAlaB04 = mSceneMgr->createSceneNode("NodoAlaB04");
-		nodoAlaI01->addChild(nodoAlaB04);
-		nodoAlaB04->attachObject(entAlaB04);
+		//entidades
+		Ogre::Entity* entAlaI02;
+		Ogre::Entity* entAlaI01;
+		Ogre::Entity* entAlaD01;
+		Ogre::Entity* entAlaD02;
 
 		//CARAS DERECHAS ALAS
-		Ogre::Entity* entAlaD01 = mSceneMgr->createEntity("MeshAlaCara");
-		Ogre::SceneNode* nodoAlaD01 = mSceneMgr->createSceneNode("NodoAlaD01");
+		entAlaD01 = mSceneMgr->createEntity("MeshAlaCara");
+		nodoAlaD01 = mSceneMgr->createSceneNode("NodoAlaD01");
 		nodoNave->addChild(nodoAlaD01);
-		nodoAlaD01->roll(Ogre::Degree( ang ) );
 		nodoAlaD01->attachObject(entAlaD01);
 		//borde
 		Ogre::Entity* entAlaIB01 = mSceneMgr->createEntity("MeshAlaBorde");
@@ -370,17 +363,156 @@ public:
 		nodoAlaD01->addChild(nodoAlaIB01);
 		nodoAlaIB01->attachObject(entAlaIB01);
 
-		Ogre::Entity* entAlaD02 = mSceneMgr->createEntity("MeshAlaCara");
-		Ogre::SceneNode* nodoAlaD02 = mSceneMgr->createSceneNode("NodoAlaD02");
+		entAlaD02 = mSceneMgr->createEntity("MeshAlaCara");
+		nodoAlaD02 = mSceneMgr->createSceneNode("NodoAlaD02");
 		nodoNave->addChild(nodoAlaD02);
-		nodoAlaD02->roll(Ogre::Degree( -ang ) );
-		nodoAlaD02->translate(0.0,-0.5,0.0);
+		nodoAlaD02->translate(0.0,-0.305,0.0);
 		nodoAlaD02->attachObject(entAlaD02);
 		//borde
 		Ogre::Entity* entAlaIB02 = mSceneMgr->createEntity("MeshAlaBorde");
 		Ogre::SceneNode* nodoAlaIB02 = mSceneMgr->createSceneNode("NodoAlaIB02");
 		nodoAlaD02->addChild(nodoAlaIB02);
 		nodoAlaIB02->attachObject(entAlaIB02);
+
+		//CARAS IZQUIERDAS ALAS
+		entAlaI02 = mSceneMgr->createEntity("MeshAlaCara");
+		nodoAlaI02 = mSceneMgr->createSceneNode("NodoAlaI02");
+		nodoNave->addChild(nodoAlaI02);
+		nodoAlaI02->yaw(Ogre::Degree( 180 ) );
+		nodoAlaI02->translate(0.0,0.0,6);
+		nodoAlaI02->attachObject(entAlaI02);
+		//borde
+		Ogre::Entity* entAlaB03 = mSceneMgr->createEntity("MeshAlaBorde");
+		Ogre::SceneNode* nodoAlaB03 = mSceneMgr->createSceneNode("NodoAlaB03");
+		nodoAlaI02->addChild(nodoAlaB03);
+		nodoAlaB03->attachObject(entAlaB03);
+
+		entAlaI01 = mSceneMgr->createEntity("MeshAlaCara");
+		nodoAlaI01 = mSceneMgr->createSceneNode("NodoAlaI01");
+		nodoNave->addChild(nodoAlaI01);
+		nodoAlaI01->yaw(Ogre::Degree( 180 ) );
+		nodoAlaI01->translate(0.0,-0.305,6);
+		nodoAlaI01->attachObject(entAlaI01);
+		//borde
+		Ogre::Entity* entAlaB04 = mSceneMgr->createEntity("MeshAlaBorde");
+		Ogre::SceneNode* nodoAlaB04 = mSceneMgr->createSceneNode("NodoAlaB04");
+		nodoAlaI01->addChild(nodoAlaB04);
+		nodoAlaB04->attachObject(entAlaB04);
+
+
+		//turbinas
+		Ogre::Entity* entTurbinas01 = mSceneMgr->createEntity("usb_cilindro.mesh");
+		Ogre::SceneNode* nodoTurbinas01 = mSceneMgr->createSceneNode("NodoTurbinas01");
+		nodoNave->addChild(nodoTurbinas01);
+		nodoTurbinas01->setPosition(2.8,1,3);
+		nodoTurbinas01->pitch(Ogre::Degree(90));
+		nodoTurbinas01->setScale(0.26,0.4,0.26);
+		nodoTurbinas01->attachObject(entTurbinas01);
+		entTurbinas01->setMaterialName("DanielaOrtiz_Nave/Gris");
+		//entTurbinas01->setMaterial(materialTorretas);
+
+		Ogre::Entity* entTurbinas01a = mSceneMgr->createEntity("usb_cilindro.mesh");
+		Ogre::SceneNode* nodoTurbinas01a = mSceneMgr->createSceneNode("NodoTurbinas01a");
+		nodoTurbinas01->addChild(nodoTurbinas01a);
+		nodoTurbinas01a->setPosition(-0.6,1.5,0.6);
+		nodoTurbinas01a->setScale(0.8,1,0.8);
+		nodoTurbinas01a->attachObject(entTurbinas01a);
+		entTurbinas01a->setMaterialName("DanielaOrtiz_Nave/Gris");
+
+		Ogre::Entity* entTurbinas02 = mSceneMgr->createEntity("usb_cilindro.mesh");
+		Ogre::SceneNode* nodoTurbinas02 = mSceneMgr->createSceneNode("NodoTurbinas02");
+		nodoNave->addChild(nodoTurbinas02);
+		nodoTurbinas02->setPosition(-2.8,1,3);
+		nodoTurbinas02->pitch(Ogre::Degree(90));
+		nodoTurbinas02->setScale(0.26,0.4,0.26);
+		nodoTurbinas02->attachObject(entTurbinas02);
+		entTurbinas02->setMaterialName("DanielaOrtiz_Nave/Gris");
+		//entTurbinas02->setMaterial(materialTorretas);
+
+		Ogre::Entity* entTurbinas02a = mSceneMgr->createEntity("usb_cilindro.mesh");
+		Ogre::SceneNode* nodoTurbinas02a = mSceneMgr->createSceneNode("NodoTurbinas02a");
+		nodoTurbinas02->addChild(nodoTurbinas02a);
+		nodoTurbinas02a->setPosition(0.6,1.5,0.6);
+		nodoTurbinas02a->setScale(0.8,1,0.8);
+		nodoTurbinas02a->attachObject(entTurbinas02a);
+		entTurbinas02a->setMaterialName("DanielaOrtiz_Nave/Gris");
+
+		Ogre::Entity* entTurbinas03 = mSceneMgr->createEntity("usb_cilindro.mesh");
+		Ogre::SceneNode* nodoTurbinas03 = mSceneMgr->createSceneNode("NodoTurbinas03");
+		nodoNave->addChild(nodoTurbinas03);
+		nodoTurbinas03->setPosition(2.8,-1,3);
+		nodoTurbinas03->pitch(Ogre::Degree(-90));
+		nodoTurbinas03->setScale(0.26,0.4,0.26);
+		nodoTurbinas03->attachObject(entTurbinas03);
+		entTurbinas03->setMaterialName("DanielaOrtiz_Nave/Gris");
+		//entTurbinas03->setMaterial(materialTorretas);
+
+		Ogre::Entity* entTurbinas03a = mSceneMgr->createEntity("usb_cilindro.mesh");
+		Ogre::SceneNode* nodoTurbinas03a = mSceneMgr->createSceneNode("NodoTurbinas03a");
+		nodoTurbinas03->addChild(nodoTurbinas03a);
+		nodoTurbinas03a->setPosition(-0.6,-1.5,0.6);
+		nodoTurbinas03a->setScale(0.8,1,0.8);
+		nodoTurbinas03a->attachObject(entTurbinas03a);
+		entTurbinas03a->setMaterialName("DanielaOrtiz_Nave/Gris");
+
+		Ogre::Entity* entTurbinas04 = mSceneMgr->createEntity("usb_cilindro.mesh");
+		Ogre::SceneNode* nodoTurbinas04 = mSceneMgr->createSceneNode("NodoTurbinas04");
+		nodoNave->addChild(nodoTurbinas04);
+		nodoTurbinas04->setPosition(-2.8,-1,3);
+		nodoTurbinas04->pitch(Ogre::Degree(-90));
+		nodoTurbinas04->setScale(0.26,0.4,0.26);
+		nodoTurbinas04->attachObject(entTurbinas04);
+		entTurbinas04->setMaterialName("DanielaOrtiz_Nave/Gris");
+		//entTurbinas04->setMaterial(materialTorretas);
+
+		Ogre::Entity* entTurbinas04a = mSceneMgr->createEntity("usb_cilindro.mesh");
+		Ogre::SceneNode* nodoTurbinas04a = mSceneMgr->createSceneNode("NodoTurbinas04a");
+		nodoTurbinas04->addChild(nodoTurbinas04a);
+		nodoTurbinas04a->setPosition(0.6,-1.5,0.6);
+		nodoTurbinas04a->setScale(0.8,1,0.8);
+		nodoTurbinas04a->attachObject(entTurbinas04a);
+		entTurbinas04a->setMaterialName("DanielaOrtiz_Nave/Gris");
+
+
+
+
+
+
+
+		/*
+
+
+float duration = 3.0f;
+
+		mRotSrc = AniAlaD02->getOrientation();
+		mRotDest = src.getRotationTo(mDirection);
+		mNode->rotate(Quaternion::Slerp(mRotProgress, mRotSrc, mRotDest)); 
+
+		Ogre::Animation* animacionAbrirAlas = mSceneMgr->createAnimation("AnimAbrirAlas",duration);
+		animacionAbrirAlas->setInterpolationMode(Animation::IM_SPLINE);
+
+		Ogre::NodeAnimationTrack* AniAlaD02 = animacionAbrirAlas->createNodeTrack(0,nodoAlaD02);
+
+		Ogre::TransformKeyFrame* key;
+
+		//FRAMES
+		key = AniAlaD02->createNodeKeyFrame(0.0);
+   		key->setRotation(Quaternion q(Degree(90), Vector3::UNIT_Z));
+
+		key = AniAlaD02->createNodeKeyFrame(3.0);
+   		key->setRotation(Quaternion::Slerp(1,-10,0.0,false));
+
+		key = AniAlaD02->createNodeKeyFrame(6.0);
+   		key->setRotation(Quaternion::Slerp(1,0.0,-10,false));
+
+		AnimacionAlasAbrir = mSceneMgr->createAnimationState("AnimLuz01");
+		AnimacionAlasAbrir->setEnabled(true);
+		AnimacionAlasAbrir->setLoop(true);
+
+		*/
+
+
+
 
 
 		/*
